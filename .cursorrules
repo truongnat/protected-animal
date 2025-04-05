@@ -1,0 +1,122 @@
+# Merged cursorrules for various web development scenarios
+
+## UI Development (Tailwind, Shadcn UI)
+
+### Tailwind Styling
+- prompt: |
+    Generate Tailwind CSS classes for styling a {{element}} with the following properties: {{properties}}.
+    Consider responsiveness and common UI patterns.
+  id: tailwind-class-generation
+  tags: [ui, styling, tailwind]
+
+- prompt: |
+    Suggest Tailwind CSS classes to improve the styling of this {{element}} based on best practices for visual hierarchy and readability.
+  id: tailwind-style-improvement
+  tags: [ui, styling, tailwind, accessibility]
+
+### Shadcn UI Components
+- prompt: |
+    Generate a Shadcn UI component for {{component_type}} with the following features: {{features}}.
+    Ensure it is accessible and integrates well within a Tailwind CSS styled application.
+  id: shadcn-component-generation
+  tags: [ui, components, shadcn, react]
+
+- prompt: |
+    How can I customize this Shadcn UI component to better fit the design system and branding of the application?
+  id: shadcn-component-customization
+  tags: [ui, components, shadcn, react, customization]
+
+
+## Next.js and Vercel Specific (with optional integrations)
+
+### Next.js Features
+- prompt: |
+    Generate a Next.js API route for {{functionality}}.
+    Consider best practices for API design, error handling, and security.
+  id: nextjs-api-route-generation
+  tags: [nextjs, backend, api, vercel]
+
+- prompt: |
+    Explain how to implement {{nextjs_feature}} in Next.js 15 with React 19, considering Server Components and Actions.
+  id: nextjs-feature-explanation
+  tags: [nextjs, react19, vercel, server-components, actions]
+
+### Vercel Deployment and Optimization
+- prompt: |
+    What are the best practices for deploying this Next.js application to Vercel?
+    Consider performance optimization, environment variables, and build configurations.
+  id: vercel-deployment-best-practices
+  tags: [vercel, deployment, nextjs, optimization]
+
+- prompt: |
+    How can I optimize this application's performance for Vercel hosting?
+    Focus on areas like image optimization, code splitting, and caching.
+  id: vercel-performance-optimization
+  tags: [vercel, performance, optimization, nextjs]
+
+
+### Vercel AI Integration (if applicable)
+- prompt: |
+    How can I integrate Vercel AI into this Next.js application to implement {{ai_feature}}?
+    Show code examples using the Vercel AI SDK.
+  id: vercel-ai-integration
+  tags: [vercel, ai, nextjs, react, vercel-ai-sdk]
+
+### Supabase Integration (if applicable)
+- prompt: |
+    Generate code to integrate Supabase for {{database_feature}}, such as authentication, data fetching, or real-time updates in a Next.js application.
+  id: supabase-integration
+  tags: [supabase, backend, database, nextjs, authentication, realtime]
+
+- prompt: |
+    What are the best practices for securing Supabase in a Next.js application, especially when handling user authentication and data access?
+  id: supabase-security-best-practices
+  tags: [supabase, security, nextjs, authentication, backend]
+
+
+## Code Quality and Principles (DRY, SOLID)
+
+### DRY (Don't Repeat Yourself)
+- prompt: |
+    Identify and refactor the duplicated code in the following snippet to adhere to the DRY principle.
+    ```{{code_snippet}}```
+  id: dry-refactoring
+  tags: [refactoring, dry, code-quality]
+
+- prompt: |
+    Suggest ways to make this code more reusable and less repetitive.
+  id: improve-code-reuse
+  tags: [refactoring, dry, code-quality, reusability]
+
+### SOLID Principles
+- prompt: |
+    Analyze this code snippet and suggest improvements to better adhere to the {{solid_principle}} principle from SOLID.
+    Explain how the suggested changes improve the code's design and maintainability.
+    ```{{code_snippet}}```
+  id: solid-principle-application
+  tags: [solid, principles, oop, design-patterns, code-quality, maintainability]
+
+- prompt: |
+    Explain the {{solid_principle}} principle in the context of this code and provide an example of how to apply it effectively.
+  id: solid-principle-explanation
+  tags: [solid, principles, oop, design-patterns, learning]
+
+
+## General Code Assistance
+
+- prompt: |
+    How can I improve the performance of this code snippet?
+    Consider aspects like algorithmic efficiency, memory usage, and common performance bottlenecks.
+    ```{{code_snippet}}```
+  id: code-performance-improvement
+  tags: [performance, optimization, code-quality]
+
+- prompt: |
+    Explain this code snippet and its functionality in detail.
+    Focus on its purpose, logic, and potential areas for improvement.
+    ```{{code_snippet}}```
+  id: code-explanation
+  tags: [explanation, learning, code-understanding]
+
+
+# End of Merged cursorrules

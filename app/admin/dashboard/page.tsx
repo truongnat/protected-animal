@@ -1,5 +1,7 @@
 'use client';
 
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
+import { getCurrentUser, logoutAdmin } from '@/lib/auth-utils';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -13,8 +15,13 @@ export default function AdminDashboardPage() {
 	const [loading, setLoading] = useState(true);
 	const [recentSpecies, setRecentSpecies] = useState<any[]>([]);
 	const [recentPosts, setRecentPosts] = useState<any[]>([]);
+	const [user, setUser] = useState<any>(null);
 
 	useEffect(() => {
+		// Get current user
+		const currentUser = getCurrentUser();
+		setUser(currentUser);
+
 		async function fetchDashboardData() {
 			setLoading(true);
 			try {
@@ -73,9 +80,44 @@ export default function AdminDashboardPage() {
 		);
 	}
 
+	const handleLogout = () => {
+		logoutAdmin();
+	};
+
 	return (
 		<div>
-			<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+			<div className="flex justify-between items-center mb-6">
+				<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+
+				<div className="flex items-center">
+					{user && (
+						<div className="mr-4 text-sm text-gray-600">
+							Logged in as <span className="font-medium">{user.username}</span>
+						</div>
+					)}
+
+					<button
+						onClick={handleLogout}
+						className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+					>
+						<svg
+							className="-ml-0.5 mr-2 h-4 w-4"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+							/>
+						</svg>
+						Log out
+					</button>
+				</div>
+			</div>
 
 			{/* Stats */}
 			<div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -214,10 +256,13 @@ export default function AdminDashboardPage() {
 										<div className="flex items-center">
 											<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
 												{species.image_url ? (
-													<img
+													<ImageWithFallback
 														src={species.image_url}
 														alt={species.name}
-														className="h-10 w-10 object-cover"
+														className="object-cover"
+														unoptimized
+														width={40}
+														height={40}
 													/>
 												) : (
 													<div className="h-10 w-10 flex items-center justify-center bg-green-100 text-green-800">

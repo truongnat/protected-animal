@@ -1,4 +1,4 @@
-// File: scripts/seed-admin.js
+// File: scripts/seed-admin-fixed.js
 // Simple script to create a single admin user for Supabase
 
 const { createClient } = require('@supabase/supabase-js');
@@ -37,6 +37,7 @@ async function seedAdminUser() {
 
 		// Check if admin_users table exists by trying to query it
 		const { error: checkTableError } = await supabase.from('admin_users').select('count').limit(1);
+
 		if (checkTableError) {
 			console.log(
 				'\nAdmin_users table does not exist. Please create it first using the SQL Editor in Supabase.',
@@ -56,17 +57,16 @@ async function seedAdminUser() {
           role TEXT NOT NULL DEFAULT 'admin',
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
-
+        
         -- Set up Row Level Security (RLS) policies
         ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
-
+        
         -- Only authenticated users can view admin_users
-        -- Use DO block to check if policy exists before creating it
         DO $$
         BEGIN
           IF NOT EXISTS (
-            SELECT 1 FROM pg_policy
-            WHERE polrelid = 'public.admin_users'::regclass
+            SELECT 1 FROM pg_policy 
+            WHERE polrelid = 'public.admin_users'::regclass 
             AND polname = 'Allow authenticated users to view admin_users'
           ) THEN
             CREATE POLICY "Allow authenticated users to view admin_users"
@@ -75,14 +75,13 @@ async function seedAdminUser() {
           END IF;
         END
         $$;
-
+        
         -- Only superadmins can insert/update/delete admin_users
-        -- Use DO block to check if policy exists before creating it
         DO $$
         BEGIN
           IF NOT EXISTS (
-            SELECT 1 FROM pg_policy
-            WHERE polrelid = 'public.admin_users'::regclass
+            SELECT 1 FROM pg_policy 
+            WHERE polrelid = 'public.admin_users'::regclass 
             AND polname = 'Allow superadmins to manage admin_users'
           ) THEN
             CREATE POLICY "Allow superadmins to manage admin_users"
@@ -99,8 +98,8 @@ async function seedAdminUser() {
 
 		console.log('Admin_users table exists, proceeding with admin user creation...');
 
-		// Check if admin user already exists
-		const { data: existingUser, error: checkError } = await supabase
+		// Check if admin user already exists in the admin_users table
+		const { data: existingAdminUser, error: checkError } = await supabase
 			.from('admin_users')
 			.select('*')
 			.eq('email', DEFAULT_ADMIN_EMAIL)
@@ -110,9 +109,9 @@ async function seedAdminUser() {
 			console.error('Error checking for existing admin user:', checkError);
 		}
 
-		if (existingUser) {
+		if (existingAdminUser) {
 			console.log(
-				`Admin user with email ${DEFAULT_ADMIN_EMAIL} already exists. Skipping creation.`,
+				`Admin user with email ${DEFAULT_ADMIN_EMAIL} already exists in admin_users table. Skipping creation.`,
 			);
 			return;
 		}
@@ -120,58 +119,71 @@ async function seedAdminUser() {
 		console.log('Creating default admin user...');
 
 		// First, check if the user already exists in Auth
-		const {
-			data: { users },
-			error: getUserError,
-		} = await supabase.auth.admin.listUsers();
-
-		if (getUserError) {
-			console.error('Error checking for existing users:', getUserError);
-			throw getUserError;
-		}
-
-		// Find if our admin email already exists
-		const existingUser = users.find((user) => user.email === DEFAULT_ADMIN_EMAIL);
 		let authUser;
 
-		if (existingUser) {
-			console.log(
-				`User with email ${DEFAULT_ADMIN_EMAIL} already exists in Auth. Using existing user.`,
-			);
-			authUser = { user: existingUser };
-
-			// Update the password for the existing user
-			const { error: updateError } = await supabase.auth.admin.updateUserById(existingUser.id, {
-				password: DEFAULT_ADMIN_PASSWORD,
-			});
-
-			if (updateError) {
-				console.warn('Could not update password for existing user:', updateError);
-			}
-		} else {
-			// 1. Create the user in Supabase Auth
-			const { data, error: authError } = await supabase.auth.admin.createUser({
+		try {
+			// Try to sign in with the credentials to see if user exists
+			const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
 				email: DEFAULT_ADMIN_EMAIL,
 				password: DEFAULT_ADMIN_PASSWORD,
-				email_confirm: true, // Auto-confirm the email
 			});
 
-			if (authError) {
-				throw authError;
+			if (!signInError && signInData.user) {
+				console.log(
+					`User with email ${DEFAULT_ADMIN_EMAIL} already exists in Auth. Using existing user.`,
+				);
+				authUser = signInData.user;
 			}
-
-			authUser = data;
-			console.log('User created in Auth:', authUser.user.id);
+		} catch (signInError) {
+			// Ignore sign-in errors, we'll create the user if needed
+			console.log('User does not exist or password is incorrect. Will create new user.');
 		}
 
-		console.log('User created in Auth:', authUser.user.id);
+		// If user doesn't exist, create it
+		if (!authUser) {
+			try {
+				const { data, error: createError } = await supabase.auth.admin.createUser({
+					email: DEFAULT_ADMIN_EMAIL,
+					password: DEFAULT_ADMIN_PASSWORD,
+					email_confirm: true, // Auto-confirm the email
+				});
 
-		// 2. Add the user to the admin_users table
+				if (createError) {
+					throw createError;
+				}
+
+				authUser = data.user;
+				console.log('User created in Auth:', authUser.id);
+			} catch (createError) {
+				console.error('Error creating user in Auth:', createError);
+
+				// Try to get the user by email as a fallback
+				const {
+					data: { users },
+					error: listError,
+				} = await supabase.auth.admin.listUsers();
+
+				if (listError) {
+					throw listError;
+				}
+
+				const existingAuthUser = users.find((u) => u.email === DEFAULT_ADMIN_EMAIL);
+
+				if (!existingAuthUser) {
+					throw new Error('Could not create or find user in Auth');
+				}
+
+				authUser = existingAuthUser;
+				console.log('Found existing user in Auth:', authUser.id);
+			}
+		}
+
+		// Add the user to the admin_users table
 		const { data: adminUser, error: adminError } = await supabase
 			.from('admin_users')
 			.insert([
 				{
-					user_id: authUser.user.id,
+					user_id: authUser.id,
 					email: DEFAULT_ADMIN_EMAIL,
 					role: 'superadmin',
 				},
@@ -192,7 +204,7 @@ async function seedAdminUser() {
 		console.error('Error creating admin user:', error);
 
 		// Check if error is because user already exists
-		if (error.code === '23505' || error.message.includes('already exists')) {
+		if (error.code === '23505' || (error.message && error.message.includes('already exists'))) {
 			console.log('Admin user already exists. No changes made.');
 		}
 	}

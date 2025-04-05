@@ -1,64 +1,45 @@
-// Use the browser client for client-side operations
-import { supabase } from './supabase';
+// This file is deprecated and only exists for backward compatibility
+// Use auth-utils.ts instead for all authentication functions
 
-// Client-side authentication functions
+import { getCurrentUser as getUser, isAuthenticated, loginAdmin, logoutAdmin } from './auth-utils';
+
+// Re-export functions from auth-utils.ts for backward compatibility
 export async function signIn(email: string, password: string) {
-	const { data, error } = await supabase.auth.signInWithPassword({
-		email,
-		password,
-	});
+	// Convert email to username for the new auth system
+	const result = await loginAdmin(email, password);
 
-	if (error) {
-		throw new Error(error.message);
+	if (!result.success) {
+		throw new Error(result.error || 'Authentication failed');
 	}
 
-	return data;
+	return { user: getUser() };
 }
 
 export async function signOut() {
-	const { error } = await supabase.auth.signOut();
-
-	if (error) {
-		throw new Error(error.message);
-	}
-
+	logoutAdmin();
 	return true;
 }
 
 export async function getCurrentUser() {
-	const {
-		data: { session },
-	} = await supabase.auth.getSession();
-
-	if (!session) {
+	// If not authenticated, return null
+	if (!isAuthenticated()) {
 		return null;
 	}
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-	return user;
+	// Get user from the new auth system
+	const user = getUser();
+
+	// Convert to the format expected by the old code
+	return {
+		id: 'admin',
+		email: user?.username,
+		role: 'admin',
+	};
 }
 
 export async function isAdmin() {
-	const user = await getCurrentUser();
-
-	if (!user) {
-		return false;
-	}
-
-	// Check if user has admin role
-	const { data, error } = await supabase
-		.from('admin_users')
-		.select('*')
-		.eq('user_id', user.id)
-		.single();
-
-	if (error || !data) {
-		return false;
-	}
-
-	return true;
+	// In the new system, if the user is authenticated, they are an admin
+	return isAuthenticated();
 }
 
 // NOTE: The server-side authentication functions below should only be used in App Router components

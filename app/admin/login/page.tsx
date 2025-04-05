@@ -1,15 +1,25 @@
 'use client';
 
-import { signIn } from '@/lib/auth';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { isAuthenticated, loginAdmin } from '@/lib/auth-utils';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { signInAction } from './actions';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-// This login page uses a dual approach for authentication:
-// 1. Server Actions (primary method): Uses the new Next.js Server Actions for server-side authentication
-// 2. Client-side fallback: If Server Actions fail, falls back to client-side authentication
 export default function AdminLoginPage() {
-	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -17,41 +27,34 @@ export default function AdminLoginPage() {
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get('redirectTo') || '/admin/dashboard';
 
-	// Client-side form submission as fallback
-	async function handleClientSubmit(e: React.FormEvent) {
+	useEffect(() => {
+		// If already authenticated, redirect to dashboard
+		if (isAuthenticated()) {
+			router.push(redirectTo);
+		}
+	}, [router, redirectTo]);
+
+	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		setError('');
 		setLoading(true);
 
 		try {
-			// Use client-side authentication
-			await signIn(email, password);
-			router.push(redirectTo);
-		} catch (err: any) {
-			setError(err.message || 'Failed to sign in');
-			setLoading(false);
-		}
-	}
+			const result = await loginAdmin(username, password);
 
-	// Server action form submission (primary method)
-	async function handleServerAction(formData: FormData) {
-		setError('');
-		setLoading(true);
-
-		try {
-			// Add the redirectTo parameter to the form data
-			formData.append('redirectTo', redirectTo);
-
-			// Call the server action
-			const result = await signInAction(formData);
-
-			if (result?.error) {
-				setError(result.error);
-				setLoading(false);
+			if (result.success) {
+				toast.success('Login successful');
+				router.push(redirectTo);
+			} else {
+				setError(result.error || 'Invalid username or password');
+				toast.error(result.error || 'Invalid username or password');
 			}
-			// If successful, the server action will redirect
 		} catch (err: any) {
-			setError(err.message || 'Failed to sign in');
+			const errorMessage = 'An unexpected error occurred. Please try again.';
+			setError(errorMessage);
+			toast.error(errorMessage);
+			console.error('Login error:', err);
+		} finally {
 			setLoading(false);
 		}
 	}
@@ -91,20 +94,20 @@ export default function AdminLoginPage() {
 						</div>
 					)}
 
-					<form className="space-y-6" action={handleServerAction} onSubmit={handleClientSubmit}>
+					<form className="space-y-6" onSubmit={handleSubmit}>
 						<div>
-							<label htmlFor="email" className="block text-sm font-medium text-gray-700">
-								Email address
+							<label htmlFor="username" className="block text-sm font-medium text-gray-700">
+								Username
 							</label>
 							<div className="mt-1">
 								<input
-									id="email"
-									name="email"
-									type="email"
-									autoComplete="email"
+									id="username"
+									name="username"
+									type="text"
+									autoComplete="username"
 									required
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
 									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
 								/>
 							</div>
@@ -138,6 +141,22 @@ export default function AdminLoginPage() {
 							</button>
 						</div>
 					</form>
+
+					<div className="mt-6">
+						<div className="relative">
+							<div className="absolute inset-0 flex items-center">
+								<div className="w-full border-t border-gray-300"></div>
+							</div>
+							<div className="relative flex justify-center text-sm">
+								<span className="px-2 bg-white text-gray-500">Back to site</span>
+							</div>
+						</div>
+						<div className="mt-6 text-center">
+							<Link href="/" className="text-green-600 hover:text-green-500">
+								Return to homepage
+							</Link>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

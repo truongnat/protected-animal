@@ -44,6 +44,23 @@ This will create an admin user with the following credentials:
 
 **IMPORTANT**: Change this password after first login!
 
+## Using the Admin Interface
+
+Once you've set up the admin user, you can access the admin interface:
+
+1. Navigate to `/admin/auth/login` in your browser
+2. Sign in with the admin credentials
+3. You'll be redirected to the admin dashboard
+
+### Adding More Admins
+
+New users can sign up at `/admin/auth/signup`, but they'll need approval from an existing admin:
+
+1. New user signs up at `/admin/auth/signup`
+2. They'll see a "Pending Approval" message
+3. Existing admin goes to `/admin/users` and approves the new user
+4. New user can now access the admin dashboard
+
 ## Troubleshooting
 
 If you encounter any issues:
@@ -52,4 +69,8 @@ If you encounter any issues:
 2. Ensure you have created the admin_users table using the SQL script
 3. Check the console output for specific error messages
 
-For more detailed troubleshooting, see the [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) file.
+### Common Errors
+
+- **Database error creating new user**: This usually means the user already exists in Auth but not in the admin_users table. The fixed script should handle this case automatically.
+- **Table doesn't exist**: Make sure you've run the SQL script to create the admin_users table.
+- **Permission denied**: Make sure you're using the service role key, not the anon key, for admin operations.

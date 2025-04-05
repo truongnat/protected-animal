@@ -1,6 +1,6 @@
 'use client';
 
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUser, logoutAdmin } from '@/lib/auth-utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -10,9 +10,9 @@ export default function UserInfo() {
 	const router = useRouter();
 
 	useEffect(() => {
-		async function loadUser() {
+		function loadUser() {
 			try {
-				const currentUser = await getCurrentUser();
+				const currentUser = getCurrentUser();
 				if (!currentUser) {
 					router.push('/admin/login');
 					return;
@@ -55,7 +55,10 @@ export default function UserInfo() {
 			<div className="ml-3">
 				<p className="text-sm font-medium text-gray-700">{user.email}</p>
 				<button
-					onClick={() => router.push('/admin/logout')}
+					onClick={() => {
+						logoutAdmin();
+						router.push('/admin/login');
+					}}
 					className="text-xs font-medium text-gray-500 hover:text-gray-700"
 				>
 					Sign out
