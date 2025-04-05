@@ -9,13 +9,13 @@ scripts\update-all-images.bat
 ```
 
 This will update the following pages to use the `ImageWithFallback` component:
-- Species detail page (`app/species/[id]/page.tsx`)
+- Species detail page (`app/species/[id]/page.tsx`) - Fixed related species images
 - About page (`app/about/page.tsx`)
 
 Alternatively, you can update each page individually:
 
 ```bash
-copy app\species\[id]\page.tsx.updated app\species\[id]\page.tsx
+copy app\species\[id]\page.tsx.fixed app\species\[id]\page.tsx
 copy app\about\page.tsx.updated app\about\page.tsx
 ```
 
