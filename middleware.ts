@@ -1,22 +1,19 @@
-import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerSupabaseClient } from './lib/supabase-server';
 
 export async function middleware(req: NextRequest) {
 	const res = NextResponse.next();
+	const request = req;
 	const pathname = req.nextUrl.pathname;
+	let supabaseResponse = NextResponse.next({
+		request: request,
+	});
 
 	// Create a Supabase client using the standard client
 	// This is compatible with both Pages Router and App Router
-	const supabase = createClient(
-		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-		{
-			auth: {
-				persistSession: false,
-			},
-		},
-	);
+	const supabase = await createServerSupabaseClient();
 
 	// Get the auth cookies from the request
 	// The actual cookie names depend on your Supabase project

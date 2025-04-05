@@ -2,7 +2,6 @@ import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { supabase } from '@/lib/supabase';
 import type { Species } from '@/lib/supabase';
 import { getImageUrl } from '@/lib/utils';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -185,8 +184,9 @@ export default async function SpeciesDetailPage({ params }: { params: { id: stri
 											<div className="bg-white rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
 												<div className="h-40 relative">
 													<ImageWithFallback
-														src={getImageUrl(related.image_url, related.name)}
+														src={related.image_url || ''}
 														alt={related.name}
+														altText={related.name}
 														fill
 														sizes="(max-width: 768px) 100vw, 33vw"
 														className="object-cover"

@@ -1,4 +1,5 @@
 import SpeciesCharts from '@/components/charts/SpeciesCharts';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { supabase } from '@/lib/supabase';
 import type { Species } from '@/lib/supabase';
 import { getImageUrl } from '@/lib/utils';
@@ -22,9 +23,10 @@ export default async function Home() {
 			{/* Hero Section */}
 			<section className="relative bg-green-800 text-white">
 				<div className="absolute inset-0 overflow-hidden">
-					<Image
+					<ImageWithFallback
 						src="https://images.unsplash.com/photo-1574068468668-a05a11f871da?q=80&w=2070"
 						alt="Wildlife Conservation"
+						fallbackSrc="/images/hero-fallback.jpg"
 						fill
 						priority
 						unoptimized
@@ -201,9 +203,10 @@ export default async function Home() {
 									className="bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105"
 								>
 									<div className="h-48 bg-gray-200 relative overflow-hidden">
-										<Image
-											src={getImageUrl(animal.image_url, animal.name)}
+										<ImageWithFallback
+											src={animal.image_url || ''}
 											alt={animal.name}
+											altText={animal.name}
 											fill
 											sizes="(max-width: 768px) 100vw, 33vw"
 											className="object-cover"

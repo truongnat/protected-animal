@@ -1,5 +1,4 @@
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
@@ -183,7 +182,8 @@ export default function AboutPage() {
 							<div className="h-64 bg-gray-200 relative">
 								<ImageWithFallback
 									src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961"
-									alt="Team Member"
+									alt="Dr. Emma Wilson"
+									altText="Conservation Biologist"
 									fill
 									unoptimized
 									className="object-cover"
@@ -202,7 +202,8 @@ export default function AboutPage() {
 							<div className="h-64 bg-gray-200 relative">
 								<ImageWithFallback
 									src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974"
-									alt="Team Member"
+									alt="Dr. Michael Chen"
+									altText="Environmental Scientist"
 									fill
 									unoptimized
 									className="object-cover"
@@ -221,7 +222,8 @@ export default function AboutPage() {
 							<div className="h-64 bg-gray-200 relative">
 								<ImageWithFallback
 									src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974"
-									alt="Team Member"
+									alt="Sarah Johnson"
+									altText="Conservation Educator"
 									fill
 									unoptimized
 									className="object-cover"
@@ -256,6 +258,7 @@ export default function AboutPage() {
 								<ImageWithFallback
 									src="https://upload.wikimedia.org/wikipedia/en/thumb/2/24/WWF_logo.svg/1200px-WWF_logo.svg.png"
 									alt="World Wildlife Fund"
+									altText="WWF"
 									fill
 									unoptimized
 									className="object-contain"
@@ -267,6 +270,7 @@ export default function AboutPage() {
 								<ImageWithFallback
 									src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/IUCN_logo.svg/1200px-IUCN_logo.svg.png"
 									alt="IUCN"
+									altText="IUCN"
 									fill
 									unoptimized
 									className="object-contain"
@@ -278,6 +282,7 @@ export default function AboutPage() {
 								<ImageWithFallback
 									src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/National_Geographic_Logo.svg/1024px-National_Geographic_Logo.svg.png"
 									alt="National Geographic"
+									altText="National Geographic"
 									fill
 									unoptimized
 									className="object-contain"
@@ -289,6 +294,7 @@ export default function AboutPage() {
 								<ImageWithFallback
 									src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/WCS_logo_2015.svg/2560px-WCS_logo_2015.svg.png"
 									alt="Wildlife Conservation Society"
+									altText="WCS"
 									fill
 									unoptimized
 									className="object-contain"

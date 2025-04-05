@@ -17,16 +17,26 @@ export function cn(...inputs: ClassValue[]) {
  * Utility function to get a fallback image URL if the provided URL is invalid or missing
  * @param imageUrl The original image URL
  * @param name The name to use in the placeholder image
+ * @param bgColor Optional background color for the placeholder (default: 668F3C - green)
+ * @param textColor Optional text color for the placeholder (default: FFFFFF - white)
  * @returns A valid image URL
  */
-export function getImageUrl(imageUrl: string | null | undefined, name: string): string {
+export function getImageUrl(
+	imageUrl: string | null | undefined,
+	name: string,
+	bgColor: string = '668F3C',
+	textColor: string = 'FFFFFF'
+): string {
 	// If the image URL is valid, return it
 	if (imageUrl && imageUrl.startsWith('http')) {
 		return imageUrl;
 	}
 
-	// Otherwise, return a placeholder image
-	return `https://via.placeholder.com/400x300/668F3C/FFFFFF?text=${encodeURIComponent(name || 'Image')}`;
+	// Clean the name for use in the placeholder
+	const cleanName = name ? name.trim().substring(0, 20) : 'Image';
+
+	// Create a placeholder image with the provided colors using placehold.co
+	return `https://placehold.co/400x300/${bgColor}/${textColor}?text=${encodeURIComponent(cleanName)}`;
 }
 
 /**

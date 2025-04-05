@@ -6,7 +6,7 @@ import { createServerSupabaseClient } from './supabase-server';
 // Server-side authentication functions for App Router
 export async function getServerSession() {
 	const supabase = createServerSupabaseClient();
-	return await supabase.auth.getSession();
+	return await (await supabase).auth.getSession();
 }
 
 export async function getServerUser() {
@@ -30,7 +30,7 @@ export async function isAdminServer() {
 	}
 
 	// Check if user has admin role
-	const { data, error } = await supabase
+	const { data, error } = await (await supabase)
 		.from('admin_users')
 		.select('*')
 		.eq('user_id', user.id)

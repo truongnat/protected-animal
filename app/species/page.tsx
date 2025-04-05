@@ -1,4 +1,5 @@
 import SearchBar from '@/components/SearchBar';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { supabase } from '@/lib/supabase';
 import type { Species } from '@/lib/supabase';
 import { getImageUrl } from '@/lib/utils';
@@ -106,9 +107,10 @@ export default async function SpeciesPage({
 			{/* Hero Section */}
 			<section className="relative bg-green-800 text-white py-16">
 				<div className="absolute inset-0 overflow-hidden">
-					<Image
+					<ImageWithFallback
 						src="https://images.unsplash.com/photo-1564509027875-ba1c9b69526d?q=80&w=2070"
 						alt="Endangered Species"
+						fallbackSrc="/images/species-hero-fallback.jpg"
 						fill
 						priority
 						unoptimized
@@ -234,9 +236,10 @@ export default async function SpeciesPage({
 										className="bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105"
 									>
 										<div className="h-48 bg-gray-200 relative overflow-hidden">
-											<Image
-												src={getImageUrl(animal.image_url, animal.name)}
+											<ImageWithFallback
+												src={animal.image_url || ''}
 												alt={animal.name}
+												altText={animal.name}
 												fill
 												sizes="(max-width: 768px) 100vw, 33vw"
 												className="object-cover"
@@ -293,7 +296,7 @@ export default async function SpeciesPage({
 											pathname: '/species',
 											query: {
 												...searchParams,
-												page: Math.max(1, currentPage - 1).toString(),
+												page: Math.max(1, (currentPage ?? 1) - 1).toString(),
 											},
 										}}
 										className={`px-4 py-2 border rounded ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
@@ -323,7 +326,7 @@ export default async function SpeciesPage({
 											pathname: '/species',
 											query: {
 												...searchParams,
-												page: Math.min(totalPages, currentPage + 1).toString(),
+												page: Math.min(totalPages, (currentPage ?? 1) + 1).toString(),
 											},
 										}}
 										className={`px-4 py-2 border rounded ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`}

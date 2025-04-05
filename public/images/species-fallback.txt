@@ -1,0 +1,8 @@
+This is a placeholder for a fallback image. In a real project, you would place an actual image file here.
+
+For this example, we're using a text file to demonstrate the concept, but in production, you would use:
+- species-fallback.jpg
+- hero-fallback.jpg
+- species-hero-fallback.jpg
+
+These would be actual image files that would serve as fallbacks when the primary images fail to load.
