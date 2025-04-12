@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
 		// Process files in parallel
 		const postsPromises = fileNames
-			.filter(fileName => fileName.endsWith('.md') || fileName.endsWith('.mdx'))
+			.filter((fileName) => fileName.endsWith('.md') || fileName.endsWith('.mdx'))
 			.map(async (fileName) => {
 				// Remove the file extension to get the slug
 				const slug = fileName.replace(/\.mdx?$/, '');
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 					image: data.image || '',
 					date: data.date || new Date().toISOString(),
 					readingTime: data.readingTime || 0,
-					tags: data.tags || []
+					tags: data.tags || [],
 				};
 			});
 
@@ -54,16 +54,14 @@ export async function GET(request: NextRequest) {
 
 		// Filter by tag if provided
 		if (tag) {
-			posts = posts.filter(post =>
-				post.tags && post.tags.some(t =>
-					t.toLowerCase() === tag.toLowerCase()
-				)
+			posts = posts.filter(
+				(post) => post.tags && post.tags.some((t) => t.toLowerCase() === tag.toLowerCase()),
 			);
 		}
 
 		// Sort posts by date (newest first)
-		const sortedPosts = posts.sort((a, b) =>
-			new Date(b.date).getTime() - new Date(a.date).getTime()
+		const sortedPosts = posts.sort(
+			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 		);
 
 		// Apply limit

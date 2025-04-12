@@ -1,5 +1,5 @@
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import { Species } from '@/lib/core/domain/entities/species';
+import type { Species } from '@/lib/core/domain/entities/species';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { getImageUrl } from '@/lib/utils';
 import Link from 'next/link';
@@ -183,7 +183,11 @@ export default async function SpeciesDetailPage({ params }: { params: { id: stri
 								<h3 className="text-xl font-semibold mb-6">Related Species</h3>
 								<div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 									{relatedSpecies.map((related) => (
-										<Link key={related.id} href={`/landing/species/${related.id}`} className="group">
+										<Link
+											key={related.id}
+											href={`/landing/species/${related.id}`}
+											className="group"
+										>
 											<div className="bg-white rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
 												<div className="h-40 relative">
 													<ImageWithFallback

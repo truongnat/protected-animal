@@ -1,9 +1,9 @@
-import { BlogPost, BlogRepository } from '../../domain/entities/blog';
+import type { BlogPost, BlogRepository } from '../../domain/entities/blog';
 
 export class GetAllBlogPostsUseCase {
-  constructor(private blogRepository: BlogRepository) {}
+	constructor(private blogRepository: BlogRepository) {}
 
-  async execute(): Promise<BlogPost[]> {
-    return this.blogRepository.getAllPosts();
-  }
+	async execute(): Promise<BlogPost[]> {
+		return this.blogRepository.getAllPosts();
+	}
 }

@@ -4,25 +4,25 @@ const path = require('path');
 // Create the content/blog directory if it doesn't exist
 const blogDir = path.join(process.cwd(), 'content', 'blog');
 if (!fs.existsSync(blogDir)) {
-  fs.mkdirSync(blogDir, { recursive: true });
+	fs.mkdirSync(blogDir, { recursive: true });
 }
 
 // Sample blog posts
 const blogPosts = [
-  {
-    slug: 'habitat-restoration',
-    title: 'Habitat Restoration',
-    description: 'Discover how we restore and protect natural habitats for wildlife.',
-    date: '2024-03-10',
-    readingTime: 7,
-    tags: ['Conservation', 'Habitat', 'Restoration'],
-    image: '/blog/habitat.jpg',
-    author: {
-      name: 'Jane Smith',
-      avatar: '/authors/jane-smith.jpg',
-      bio: 'Environmental scientist specializing in habitat restoration'
-    },
-    content: `
+	{
+		slug: 'habitat-restoration',
+		title: 'Habitat Restoration',
+		description: 'Discover how we restore and protect natural habitats for wildlife.',
+		date: '2024-03-10',
+		readingTime: 7,
+		tags: ['Conservation', 'Habitat', 'Restoration'],
+		image: '/blog/habitat.jpg',
+		author: {
+			name: 'Jane Smith',
+			avatar: '/authors/jane-smith.jpg',
+			bio: 'Environmental scientist specializing in habitat restoration',
+		},
+		content: `
 # Habitat Restoration
 
 ## Why Habitat Restoration Matters
@@ -51,22 +51,22 @@ We've successfully restored over 5,000 acres of habitat across different ecosyst
 - Volunteer for local restoration projects
 - Support organizations working on habitat restoration
 - Practice sustainable living to reduce your environmental footprint
-    `
-  },
-  {
-    slug: 'community-engagement',
-    title: 'Community Engagement',
-    description: 'How local communities are making a difference in conservation.',
-    date: '2024-03-05',
-    readingTime: 6,
-    tags: ['Community', 'Education', 'Conservation'],
-    image: '/blog/community.jpg',
-    author: {
-      name: 'Michael Johnson',
-      avatar: '/authors/michael-johnson.jpg',
-      bio: 'Community outreach coordinator with 15 years of experience'
-    },
-    content: `
+    `,
+	},
+	{
+		slug: 'community-engagement',
+		title: 'Community Engagement',
+		description: 'How local communities are making a difference in conservation.',
+		date: '2024-03-05',
+		readingTime: 6,
+		tags: ['Community', 'Education', 'Conservation'],
+		image: '/blog/community.jpg',
+		author: {
+			name: 'Michael Johnson',
+			avatar: '/authors/michael-johnson.jpg',
+			bio: 'Community outreach coordinator with 15 years of experience',
+		},
+		content: `
 # Community Engagement in Conservation
 
 ## The Power of Local Communities
@@ -94,22 +94,22 @@ In the Serengeti region, we've trained over 200 local residents as Wildlife Guar
 - Participate in local conservation groups
 - Support community-based conservation initiatives
 - Share conservation knowledge with your community
-    `
-  },
-  {
-    slug: 'wildlife-photography-tips',
-    title: 'Wildlife Photography Tips',
-    description: 'Expert advice for capturing stunning wildlife photographs.',
-    date: '2024-02-20',
-    readingTime: 8,
-    tags: ['Photography', 'Wildlife', 'Tips'],
-    image: '/blog/photography.jpg',
-    author: {
-      name: 'Sarah Williams',
-      avatar: '/authors/sarah-williams.jpg',
-      bio: 'Award-winning wildlife photographer and conservationist'
-    },
-    content: `
+    `,
+	},
+	{
+		slug: 'wildlife-photography-tips',
+		title: 'Wildlife Photography Tips',
+		description: 'Expert advice for capturing stunning wildlife photographs.',
+		date: '2024-02-20',
+		readingTime: 8,
+		tags: ['Photography', 'Wildlife', 'Tips'],
+		image: '/blog/photography.jpg',
+		author: {
+			name: 'Sarah Williams',
+			avatar: '/authors/sarah-williams.jpg',
+			bio: 'Award-winning wildlife photographer and conservationist',
+		},
+		content: `
 # Wildlife Photography Tips
 
 ## Getting Started with Wildlife Photography
@@ -141,16 +141,16 @@ Wildlife photography is both challenging and rewarding. It requires patience, te
 ## Share Your Conservation Message
 
 Use your wildlife photography to raise awareness about conservation issues and inspire others to protect endangered species.
-    `
-  }
+    `,
+	},
 ];
 
 // Generate the blog post files
-blogPosts.forEach(post => {
-  const { slug, title, description, date, readingTime, tags, image, author, content } = post;
-  
-  // Create frontmatter
-  const frontmatter = `---
+blogPosts.forEach((post) => {
+	const { slug, title, description, date, readingTime, tags, image, author, content } = post;
+
+	// Create frontmatter
+	const frontmatter = `---
 title: '${title}'
 description: '${description}'
 date: '${date}'
@@ -165,11 +165,11 @@ author:
 
 ${content}`;
 
-  // Write to file
-  const filePath = path.join(blogDir, `${slug}.mdx`);
-  fs.writeFileSync(filePath, frontmatter);
-  
-  console.log(`Created blog post: ${filePath}`);
+	// Write to file
+	const filePath = path.join(blogDir, `${slug}.mdx`);
+	fs.writeFileSync(filePath, frontmatter);
+
+	console.log(`Created blog post: ${filePath}`);
 });
 
 console.log('Blog post generation complete!');

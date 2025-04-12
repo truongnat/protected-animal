@@ -29,7 +29,7 @@ async function getSpeciesData(searchParams: SearchParams) {
 			status: searchParams.status,
 			search: searchParams.search,
 			page,
-			limit: 9 // Number of species per page
+			limit: 9, // Number of species per page
 		});
 
 		return {
@@ -70,7 +70,7 @@ export default async function SpeciesPage({
 		region: searchParams.region,
 		status: searchParams.status,
 		page: searchParams.page,
-		search: searchParams.search
+		search: searchParams.search,
 	};
 
 	const { species, count, totalPages, currentPage } = await getSpeciesData(serializedParams);

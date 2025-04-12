@@ -1,4 +1,4 @@
-import { Species } from '@/lib/core/domain/entities/species';
+import type { Species } from '@/lib/core/domain/entities/species';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import Link from 'next/link';
 import ConservationStatusChart from './ConservationStatusChart';

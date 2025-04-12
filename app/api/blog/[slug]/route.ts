@@ -1,9 +1,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { type NextRequest, NextResponse } from 'next/server';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { type NextRequest, NextResponse } from 'next/server';
 
 // Path to the blog content directory
 const contentDirectory = path.join(process.cwd(), 'content', 'blog');
@@ -68,7 +68,6 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 		// Wrap the content in a div with a class for styling
 		contentHtml = `<div class="markdown-content">${contentHtml}</div>`;
 
-
 		// Create a post object
 		const post = {
 			id: slug,
@@ -83,7 +82,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 			image: data.image || '',
 			date: data.date || new Date().toISOString(),
 			readingTime: data.readingTime || 0,
-			tags: data.tags || []
+			tags: data.tags || [],
 		};
 
 		return NextResponse.json(post);

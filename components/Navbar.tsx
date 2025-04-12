@@ -1,7 +1,7 @@
 'use client';
+import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { useState } from 'react';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 // const navs, interface for navs, landing start with /landing
 interface Nav {

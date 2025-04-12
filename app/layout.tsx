@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'sonner'
-import { ThemeProvider } from "@/components/theme-provider"
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from 'sonner';
 
 const poppins = Poppins({
 	weight: ['300', '400', '500', '600', '700'],

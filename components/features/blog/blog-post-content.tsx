@@ -1,14 +1,14 @@
 'use client';
 
-import { BlogPost } from '@/lib/core/domain/entities/blog';
+import type { BlogPost } from '@/lib/core/domain/entities/blog';
 
 interface BlogPostContentProps {
-  post: BlogPost;
+	post: BlogPost;
 }
 
 export function BlogPostContent({ post }: BlogPostContentProps) {
-  // Add comprehensive styles for markdown content
-  const blogStyles = `
+	// Add comprehensive styles for markdown content
+	const blogStyles = `
     /* Base styles */
     .markdown-content {
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -226,13 +226,15 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
     }
   `;
 
-  return (
-    <>
-      <style jsx global>{blogStyles}</style>
-      <article
-        className="blog-post-content"
-        dangerouslySetInnerHTML={{ __html: post.content as string }}
-      />
-    </>
-  );
+	return (
+		<>
+			<style jsx global>
+				{blogStyles}
+			</style>
+			<article
+				className="blog-post-content"
+				dangerouslySetInnerHTML={{ __html: post.content as string }}
+			/>
+		</>
+	);
 }
