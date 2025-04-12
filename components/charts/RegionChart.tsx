@@ -1,6 +1,6 @@
 'use client';
 
-import type { Species } from '@/lib/supabase';
+import type { Species } from '@/lib/core/domain/entities/species';
 import {
 	BarElement,
 	CategoryScale,

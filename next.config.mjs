@@ -1,5 +1,10 @@
+import createMDX from '@next/mdx'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	// Configure pageExtensions to include md and mdx
+	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+	// Configure images
 	images: {
 		domains: [
 			'files.worldwildlife.org',
@@ -14,4 +19,13 @@ const nextConfig = {
 	},
 };
 
-export default nextConfig;
+// Merge MDX config with Next.js config
+const withMDX = createMDX({
+	// Add markdown plugins here, as desired
+	options: {
+		remarkPlugins: [],
+		rehypePlugins: [],
+	},
+});
+
+export default withMDX(nextConfig);

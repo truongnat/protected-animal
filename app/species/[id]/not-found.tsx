@@ -10,7 +10,7 @@ export default function SpeciesNotFound() {
 					The species you're looking for might be endangered, but it doesn't exist in our database.
 				</p>
 				<Link
-					href="/species"
+					href="/landing/species"
 					className="inline-block bg-green-700 text-white px-6 py-3 rounded-md font-medium hover:bg-green-800 transition"
 				>
 					View All Species

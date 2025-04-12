@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config = {
-	darkMode: ['class'],
+	darkMode: 'class',
 	content: [
 		'./pages/**/*.{ts,tsx}',
 		'./components/**/*.{ts,tsx}',
@@ -55,12 +55,28 @@ const config = {
 			},
 			textColor: {
 				foreground: 'hsl(var(--foreground))',
+				primary: 'hsl(var(--primary))',
+				secondary: 'hsl(var(--secondary))',
+				muted: 'hsl(var(--muted-foreground))',
+				accent: 'hsl(var(--accent))',
+				destructive: 'hsl(var(--destructive))',
 			},
 			backgroundColor: {
 				background: 'hsl(var(--background))',
+				primary: 'hsl(var(--primary))',
+				secondary: 'hsl(var(--secondary))',
+				muted: 'hsl(var(--muted))',
+				accent: 'hsl(var(--accent))',
+				destructive: 'hsl(var(--destructive))',
 			},
 			borderColor: {
 				border: 'hsl(var(--border))',
+				input: 'hsl(var(--input))',
+				primary: 'hsl(var(--primary))',
+				secondary: 'hsl(var(--secondary))',
+				muted: 'hsl(var(--muted))',
+				accent: 'hsl(var(--accent))',
+				destructive: 'hsl(var(--destructive))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -83,7 +99,10 @@ const config = {
 			},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [
+		require('@tailwindcss/typography'),
+		require('tailwindcss-animate'),
+	],
 } satisfies Config;
 
 export default config;

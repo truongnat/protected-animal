@@ -1,38 +1,40 @@
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import { supabase } from '@/lib/supabase';
-import type { Species } from '@/lib/supabase';
+import { Species } from '@/lib/core/domain/entities/species';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { getImageUrl } from '@/lib/utils';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-// Function to fetch a specific species by ID
-async function getSpeciesById(id: string) {
-	const { data, error } = await supabase.from('species').select('*').eq('id', id).single();
+/**
+ * Fetches a specific species by ID
+ */
+async function getSpeciesById(id: string): Promise<Species | null> {
+	try {
+		// Get use case from factory
+		const getSpeciesByIdUseCase = SpeciesFactory.createGetSpeciesByIdUseCase();
 
-	if (error || !data) {
-		console.error('Error fetching species:', error);
+		// Execute use case to get species by ID
+		return await getSpeciesByIdUseCase.execute(Number(id));
+	} catch (error) {
+		console.error(`Error fetching species with id ${id}:`, error);
 		return null;
 	}
-
-	return data as Species;
 }
 
-// Function to fetch related species (same region or conservation status)
-async function getRelatedSpecies(species: Species, limit = 3) {
-	const { data, error } = await supabase
-		.from('species')
-		.select('*')
-		.or(`region.eq.${species.region},conservation_status.eq.${species.conservation_status}`)
-		.neq('id', species.id)
-		.limit(limit);
+/**
+ * Fetches related species (same region or conservation status)
+ */
+async function getRelatedSpecies(species: Species, limit = 3): Promise<Species[]> {
+	try {
+		// Get use case from factory
+		const getRelatedSpeciesUseCase = SpeciesFactory.createGetRelatedSpeciesUseCase();
 
-	if (error) {
-		console.error('Error fetching related species:', error);
+		// Execute use case to get related species
+		return await getRelatedSpeciesUseCase.execute(species, limit);
+	} catch (error) {
+		console.error(`Error fetching related species for ${species.name}:`, error);
 		return [];
 	}
-
-	return data as Species[];
 }
 
 export default async function SpeciesDetailPage({ params }: { params: { id: string } }) {
@@ -138,7 +140,7 @@ export default async function SpeciesDetailPage({ params }: { params: { id: stri
 															? '70%'
 															: '50%',
 											}}
-										></div>
+										/>
 									</div>
 								</div>
 							</div>
@@ -181,7 +183,7 @@ export default async function SpeciesDetailPage({ params }: { params: { id: stri
 								<h3 className="text-xl font-semibold mb-6">Related Species</h3>
 								<div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 									{relatedSpecies.map((related) => (
-										<Link key={related.id} href={`/species/${related.id}`} className="group">
+										<Link key={related.id} href={`/landing/species/${related.id}`} className="group">
 											<div className="bg-white rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
 												<div className="h-40 relative">
 													<ImageWithFallback
@@ -208,7 +210,7 @@ export default async function SpeciesDetailPage({ params }: { params: { id: stri
 
 						<div className="mt-8 text-center">
 							<Link
-								href="/species"
+								href="/landing/species"
 								className="inline-flex items-center text-green-700 hover:text-green-900"
 							>
 								<svg

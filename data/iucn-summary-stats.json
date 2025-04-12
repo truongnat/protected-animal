@@ -1,0 +1,27 @@
+{
+  "totalSpeciesAssessed": 142577,
+  "threatCategories": {
+    "Extinct": 902,
+    "Extinct in the Wild": 84,
+    "Critically Endangered": 7762,
+    "Endangered": 13285,
+    "Vulnerable": 15200,
+    "Near Threatened": 8162,
+    "Least Concern": 73295,
+    "Data Deficient": 20322
+  },
+  "taxonomicGroups": {
+    "Mammals": 6495,
+    "Birds": 11158,
+    "Reptiles": 10793,
+    "Amphibians": 7316,
+    "Fishes": 20181,
+    "Insects": 8131,
+    "Molluscs": 7781,
+    "Crustaceans": 2872,
+    "Corals": 846,
+    "Plants": 42108,
+    "Fungi & Protists": 285
+  },
+  "lastUpdated": "2025-04-12T16:54:37.664Z"
+}

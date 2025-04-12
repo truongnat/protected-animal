@@ -9,28 +9,6 @@ export const supabase = createBrowserClient(
 // Export types for better type safety
 export type { User, Session } from '@supabase/supabase-js';
 
-// Define the database schema types
-export interface Species {
-	id: number;
-	name: string;
-	scientific_name: string;
-	conservation_status: string;
-	population: number;
-	habitat: string;
-	description: string;
-	image_url: string;
-	region: string;
-	created_at: string;
-}
+// Note: Database schema types have been moved to lib/core/domain/entities
 
-export type BlogPost = {
-	id: number;
-	title: string;
-	content: string;
-	author: string;
-	image_url: string;
-	published_at: string;
-	category: string;
-	tags: string[];
-	slug: string;
-};
+// Note: BlogPost type has been moved to lib/core/domain/entities/blog.ts

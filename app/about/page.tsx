@@ -61,7 +61,7 @@ export default function AboutPage() {
 								efforts underway to protect them.
 							</p>
 							<div className="flex items-center text-green-700 font-medium">
-								<Link href="/species" className="inline-flex items-center hover:text-green-800">
+								<Link href="/landing/species" className="inline-flex items-center hover:text-green-800">
 									Explore Endangered Species
 									<svg
 										xmlns="http://www.w3.org/2000/svg"

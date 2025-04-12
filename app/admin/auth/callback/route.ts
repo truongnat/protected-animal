@@ -38,9 +38,8 @@ export async function GET(request: NextRequest) {
 			// Redirect to the dashboard or a pending approval page
 			if (existingAdmin && existingAdmin.role !== 'pending') {
 				return NextResponse.redirect(new URL('/admin/dashboard', request.url));
-			} else {
-				return NextResponse.redirect(new URL('/admin/auth/pending', request.url));
 			}
+			return NextResponse.redirect(new URL('/admin/auth/pending', request.url));
 		}
 	}
 

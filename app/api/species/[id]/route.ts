@@ -50,8 +50,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 		const updates = await request.json();
 
 		// Remove any fields that shouldn't be updated
-		delete updates.id;
-		delete updates.created_at;
+		updates.id = undefined;
+		updates.created_at = undefined;
 
 		// Update the species
 		const { data, error } = await supabase

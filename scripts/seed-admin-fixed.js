@@ -204,7 +204,7 @@ async function seedAdminUser() {
 		console.error('Error creating admin user:', error);
 
 		// Check if error is because user already exists
-		if (error.code === '23505' || (error.message && error.message.includes('already exists'))) {
+		if (error.code === '23505' || error.message?.includes('already exists')) {
 			console.log('Admin user already exists. No changes made.');
 		}
 	}

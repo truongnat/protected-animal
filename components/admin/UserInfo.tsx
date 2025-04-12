@@ -32,10 +32,10 @@ export default function UserInfo() {
 	if (loading) {
 		return (
 			<div className="flex items-center">
-				<div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse"></div>
+				<div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse" />
 				<div className="ml-3">
-					<div className="h-4 w-24 bg-gray-300 rounded animate-pulse"></div>
-					<div className="mt-1 h-3 w-16 bg-gray-300 rounded animate-pulse"></div>
+					<div className="h-4 w-24 bg-gray-300 rounded animate-pulse" />
+					<div className="mt-1 h-3 w-16 bg-gray-300 rounded animate-pulse" />
 				</div>
 			</div>
 		);

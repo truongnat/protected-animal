@@ -102,7 +102,7 @@ export default function AuthDebugPage() {
 
 					{loading ? (
 						<div className="px-4 py-5 sm:p-6 text-center">
-							<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500 mx-auto"></div>
+							<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500 mx-auto" />
 							<p className="mt-2 text-sm text-gray-500">Loading authentication data...</p>
 						</div>
 					) : error ? (

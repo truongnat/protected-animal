@@ -161,7 +161,7 @@ export default function AdminUsersPage() {
 				<div className="mt-6 bg-white shadow overflow-hidden sm:rounded-md">
 					{loading ? (
 						<div className="py-12 flex justify-center">
-							<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+							<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500" />
 						</div>
 					) : users.length === 0 ? (
 						<div className="py-12 text-center text-gray-500">No admin users found</div>

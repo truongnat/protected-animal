@@ -1,9 +1,7 @@
 import SearchBar from '@/components/SearchBar';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import { supabase } from '@/lib/supabase';
-import type { Species } from '@/lib/supabase';
-import { getImageUrl } from '@/lib/utils';
-import Image from 'next/image';
+import { Species } from '@/lib/core/domain/entities/species';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import Link from 'next/link';
 
 // Define the types for the search params
@@ -14,84 +12,52 @@ type SearchParams = {
 	search?: string;
 };
 
-// Function to fetch data from Supabase
+/**
+ * Fetches species data with filters and pagination
+ */
 async function getSpeciesData(searchParams: SearchParams) {
-	const region = searchParams.region;
-	const status = searchParams.status;
-	const search = searchParams.search;
-	const page = Number.parseInt(searchParams.page || '1');
-	const limit = 9; // Number of species per page
-	const offset = (page - 1) * limit;
+	try {
+		// Get use case from factory
+		const getSpeciesWithFiltersUseCase = SpeciesFactory.createGetSpeciesWithFiltersUseCase();
 
-	// Start building the query
-	let query = supabase.from('species').select('*', { count: 'exact' });
+		// Parse search params
+		const page = Number.parseInt(searchParams.page || '1');
 
-	// Apply filters if provided
-	if (region) {
-		query = query.eq('region', region);
+		// Execute use case to get species with filters
+		const result = await getSpeciesWithFiltersUseCase.execute({
+			region: searchParams.region,
+			status: searchParams.status,
+			search: searchParams.search,
+			page,
+			limit: 9 // Number of species per page
+		});
+
+		return {
+			species: result.species,
+			count: result.count,
+			totalPages: result.totalPages,
+			currentPage: result.currentPage,
+		};
+	} catch (error) {
+		console.error('Error fetching species data:', error);
+		return { species: [], count: 0, totalPages: 0, currentPage: 1 };
 	}
-
-	if (status) {
-		query = query.eq('conservation_status', status);
-	}
-
-	// Apply search if provided
-	if (search) {
-		query = query.or(
-			`name.ilike.%${search}%,scientific_name.ilike.%${search}%,description.ilike.%${search}%`,
-		);
-	}
-
-	// Apply pagination
-	query = query.order('name').range(offset, offset + limit - 1);
-
-	// Execute the query
-	const { data: species, count, error } = await query;
-
-	if (error) {
-		console.error('Error fetching species:', error);
-		return { species: [], count: 0, totalPages: 0 };
-	}
-
-	const totalPages = Math.ceil((count || 0) / limit);
-
-	return {
-		species: (species as Species[]) || [],
-		count: count || 0,
-		totalPages,
-		currentPage: page,
-	};
 }
 
-// Function to get unique regions and statuses for filters
+/**
+ * Fetches filter options (unique regions and statuses)
+ */
 async function getFilterOptions() {
-	// Get unique regions
-	const { data: regions, error: regionsError } = await supabase
-		.from('species')
-		.select('region')
-		.order('region');
+	try {
+		// Get use case from factory
+		const getFilterOptionsUseCase = SpeciesFactory.createGetFilterOptionsUseCase();
 
-	// Get unique conservation statuses
-	const { data: statuses, error: statusesError } = await supabase
-		.from('species')
-		.select('conservation_status')
-		.order('conservation_status');
-
-	if (regionsError || statusesError) {
-		console.error('Error fetching filter options:', regionsError || statusesError);
+		// Execute use case to get filter options
+		return await getFilterOptionsUseCase.execute();
+	} catch (error) {
+		console.error('Error fetching filter options:', error);
 		return { regions: [], statuses: [] };
 	}
-
-	// Extract unique values
-	const uniqueRegions = Array.from(new Set(regions?.map((item) => item.region).filter(Boolean)));
-	const uniqueStatuses = Array.from(
-		new Set(statuses?.map((item) => item.conservation_status).filter(Boolean)),
-	);
-
-	return {
-		regions: uniqueRegions,
-		statuses: uniqueStatuses,
-	};
 }
 
 export default async function SpeciesPage({
@@ -99,7 +65,15 @@ export default async function SpeciesPage({
 }: {
 	searchParams: SearchParams;
 }) {
-	const { species, count, totalPages, currentPage } = await getSpeciesData(searchParams);
+	// Create a serializable version of searchParams
+	const serializedParams: SearchParams = {
+		region: searchParams.region,
+		status: searchParams.status,
+		page: searchParams.page,
+		search: searchParams.search
+	};
+
+	const { species, count, totalPages, currentPage } = await getSpeciesData(serializedParams);
 	const { regions, statuses } = await getFilterOptions();
 
 	return (
@@ -142,12 +116,12 @@ export default async function SpeciesPage({
 										href={{
 											pathname: '/species',
 											query: {
-												...searchParams,
+												...serializedParams,
 												region: undefined,
 												page: '1',
 											},
 										}}
-										className={`block w-full py-1 px-2 rounded ${!searchParams.region ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
+										className={`block w-full py-1 px-2 rounded ${!serializedParams.region ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
 									>
 										All Regions
 									</Link>
@@ -158,12 +132,12 @@ export default async function SpeciesPage({
 											href={{
 												pathname: '/species',
 												query: {
-													...searchParams,
+													...serializedParams,
 													region: region,
 													page: '1',
 												},
 											}}
-											className={`block w-full py-1 px-2 rounded ${searchParams.region === region ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
+											className={`block w-full py-1 px-2 rounded ${serializedParams.region === region ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
 										>
 											{region}
 										</Link>
@@ -181,12 +155,12 @@ export default async function SpeciesPage({
 										href={{
 											pathname: '/species',
 											query: {
-												...searchParams,
+												...serializedParams,
 												status: undefined,
 												page: '1',
 											},
 										}}
-										className={`block w-full py-1 px-2 rounded ${!searchParams.status ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
+										className={`block w-full py-1 px-2 rounded ${!serializedParams.status ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
 									>
 										All Statuses
 									</Link>
@@ -197,12 +171,12 @@ export default async function SpeciesPage({
 											href={{
 												pathname: '/species',
 												query: {
-													...searchParams,
+													...serializedParams,
 													status: status,
 													page: '1',
 												},
 											}}
-											className={`block w-full py-1 px-2 rounded ${searchParams.status === status ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
+											className={`block w-full py-1 px-2 rounded ${serializedParams.status === status ? 'bg-green-100 text-green-800' : 'hover:bg-gray-200'}`}
 										>
 											{status}
 										</Link>
@@ -218,9 +192,9 @@ export default async function SpeciesPage({
 						<div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 							<h2 className="text-2xl font-semibold">
 								{count} {count === 1 ? 'Species' : 'Species'} Found
-								{searchParams.region && <span> in {searchParams.region}</span>}
-								{searchParams.status && <span> with status "{searchParams.status}"</span>}
-								{searchParams.search && <span> matching "{searchParams.search}"</span>}
+								{serializedParams.region && <span> in {serializedParams.region}</span>}
+								{serializedParams.status && <span> with status "{serializedParams.status}"</span>}
+								{serializedParams.search && <span> matching "{serializedParams.search}"</span>}
 							</h2>
 							<div className="w-full md:w-64">
 								<SearchBar placeholder="Search species..." />
@@ -267,7 +241,7 @@ export default async function SpeciesPage({
 																		? '70%'
 																		: '50%',
 														}}
-													></div>
+													/>
 												</div>
 											</div>
 											<p className="text-gray-600 mb-4 line-clamp-3">{animal.description}</p>
@@ -295,7 +269,7 @@ export default async function SpeciesPage({
 										href={{
 											pathname: '/species',
 											query: {
-												...searchParams,
+												...serializedParams,
 												page: Math.max(1, (currentPage ?? 1) - 1).toString(),
 											},
 										}}
@@ -311,7 +285,7 @@ export default async function SpeciesPage({
 											href={{
 												pathname: '/species',
 												query: {
-													...searchParams,
+													...serializedParams,
 													page: page.toString(),
 												},
 											}}
@@ -325,7 +299,7 @@ export default async function SpeciesPage({
 										href={{
 											pathname: '/species',
 											query: {
-												...searchParams,
+												...serializedParams,
 												page: Math.min(totalPages, (currentPage ?? 1) + 1).toString(),
 											},
 										}}

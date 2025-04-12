@@ -24,11 +24,11 @@ export function cn(...inputs: ClassValue[]) {
 export function getImageUrl(
 	imageUrl: string | null | undefined,
 	name: string,
-	bgColor: string = '668F3C',
-	textColor: string = 'FFFFFF'
+	bgColor = '668F3C',
+	textColor = 'FFFFFF',
 ): string {
 	// If the image URL is valid, return it
-	if (imageUrl && imageUrl.startsWith('http')) {
+	if (imageUrl?.startsWith('http')) {
 		return imageUrl;
 	}
 

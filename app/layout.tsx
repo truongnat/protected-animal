@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
+import { Toaster } from 'sonner'
+import { ThemeProvider } from "@/components/theme-provider"
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 
@@ -21,11 +23,19 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body className={poppins.className}>
-				<Navbar />
-				<main className="min-h-screen">{children}</main>
-				<Footer />
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Navbar />
+					{children}
+					<Footer />
+				</ThemeProvider>
+				<Toaster />
 			</body>
 		</html>
 	);

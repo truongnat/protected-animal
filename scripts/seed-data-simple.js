@@ -12,7 +12,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 console.log('Supabase URL:', supabaseUrl);
 console.log(
 	'Supabase Key (first 5 chars):',
-	supabaseKey ? supabaseKey.substring(0, 5) + '...' : 'undefined',
+	supabaseKey ? `${supabaseKey.substring(0, 5)}...` : 'undefined',
 );
 
 if (!supabaseUrl || !supabaseKey) {

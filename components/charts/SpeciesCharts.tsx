@@ -1,20 +1,24 @@
-import { supabase } from '@/lib/supabase';
-import type { Species } from '@/lib/supabase';
+import { Species } from '@/lib/core/domain/entities/species';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import Link from 'next/link';
 import ConservationStatusChart from './ConservationStatusChart';
 import PopulationChart from './PopulationChart';
 import RegionChart from './RegionChart';
 
-// Function to fetch all species data for charts
-async function getSpeciesForCharts() {
-	const { data, error } = await supabase.from('species').select('*').order('name');
+/**
+ * Fetches all species data for charts
+ */
+async function getSpeciesForCharts(): Promise<Species[]> {
+	try {
+		// Get use case from factory
+		const getAllSpeciesUseCase = SpeciesFactory.createGetAllSpeciesUseCase();
 
-	if (error) {
+		// Execute use case to get all species
+		return await getAllSpeciesUseCase.execute();
+	} catch (error) {
 		console.error('Error fetching species for charts:', error);
 		return [];
 	}
-
-	return data as Species[];
 }
 
 export default async function SpeciesCharts() {
@@ -39,7 +43,7 @@ export default async function SpeciesCharts() {
 
 				<div className="mt-12 text-center">
 					<Link
-						href="/species"
+						href="/landing/species"
 						className="inline-block bg-green-700 text-white px-6 py-3 rounded-md font-medium hover:bg-green-800 transition"
 					>
 						Explore All Species Data

@@ -21,13 +21,8 @@ export default function Footer() {
 								</Link>
 							</li>
 							<li>
-								<Link href="/species" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/landing/species" className="text-sm text-gray-300 hover:text-white">
 									Endangered Species
-								</Link>
-							</li>
-							<li>
-								<Link href="/charts" className="text-sm text-gray-300 hover:text-white">
-									Charts
 								</Link>
 							</li>
 							<li>

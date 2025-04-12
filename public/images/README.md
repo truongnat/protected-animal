@@ -6,7 +6,7 @@ This directory contains fallback images that are used when the primary images fa
 
 Place the following images in this directory:
 
-- `species-fallback.jpg` - Used as a fallback for species images
+- `/images/default-image.png` - Used as a fallback for species images
 - `hero-fallback.jpg` - Used as a fallback for hero section images
 - `species-hero-fallback.jpg` - Used as a fallback for the species list hero image
 
