@@ -1,96 +1,114 @@
-import { supabase } from '@/lib/supabase';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { type NextRequest, NextResponse } from 'next/server';
 
-// GET /api/species/[id] - Get a specific species by ID with related species
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+// GET /api/species/[id] - Get species by ID with optional related species
+export async function GET(
+	request: NextRequest,
+	{ params }: { params: Promise<{ id: string }> }
+) {
 	try {
-		const id = params.id;
-		const { searchParams } = new URL(request.url);
-		const includeRelated = searchParams.get('includeRelated') === 'true';
-
-		// Fetch the species
-		const { data, error } = await supabase.from('species').select('*').eq('id', id).single();
-
-		if (error) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
+		const { id: idParam } = await params;
+		const id = Number.parseInt(idParam);
+		
+		if (isNaN(id)) {
+			return NextResponse.json(
+				{ error: 'Invalid species ID' },
+				{ status: 400 }
+			);
 		}
 
-		if (!data) {
-			return NextResponse.json({ error: 'Species not found' }, { status: 404 });
+		// Get use case from factory
+		const getSpeciesByIdUseCase = SpeciesFactory.createGetSpeciesByIdUseCase();
+		const getRelatedSpeciesUseCase = SpeciesFactory.createGetRelatedSpeciesUseCase();
+
+		// Execute use cases
+		const species = await getSpeciesByIdUseCase.execute(id);
+		
+		if (!species) {
+			return NextResponse.json(
+				{ error: 'Species not found' },
+				{ status: 404 }
+			);
 		}
 
-		// If includeRelated is true, fetch related species
-		if (includeRelated && data) {
-			const { data: relatedSpecies, error: relatedError } = await supabase
-				.from('species')
-				.select('*')
-				.or(`region.eq.${data.region},conservation_status.eq.${data.conservation_status}`)
-				.neq('id', id)
-				.limit(3);
+		// Get related species (same region or conservation status)
+		const relatedSpecies = await getRelatedSpeciesUseCase.execute(species, 4);
 
-			if (!relatedError && relatedSpecies) {
-				return NextResponse.json({
-					species: data,
-					relatedSpecies,
-				});
-			}
-		}
-
-		return NextResponse.json({ species: data });
+		return NextResponse.json({
+			species,
+			relatedSpecies,
+		});
 	} catch (error) {
-		console.error('Error fetching species:', error);
-		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+		console.error(`Error in GET /api/species/${(await params).id}:`, error);
+		return NextResponse.json(
+			{ error: 'Failed to fetch species' },
+			{ status: 500 }
+		);
 	}
 }
 
-// PATCH /api/species/[id] - Update a specific species (for admin use)
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+// PATCH /api/species/[id] - Update species (admin only)
+export async function PATCH(
+	request: NextRequest,
+	{ params }: { params: Promise<{ id: string }> }
+) {
 	try {
-		const id = params.id;
-		const updates = await request.json();
-
-		// Remove any fields that shouldn't be updated
-		updates.id = undefined;
-		updates.created_at = undefined;
-
-		// Update the species
-		const { data, error } = await supabase
-			.from('species')
-			.update(updates)
-			.eq('id', id)
-			.select()
-			.single();
-
-		if (error) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
+		const { id: idParam } = await params;
+		const id = Number.parseInt(idParam);
+		
+		if (isNaN(id)) {
+			return NextResponse.json(
+				{ error: 'Invalid species ID' },
+				{ status: 400 }
+			);
 		}
 
-		if (!data) {
-			return NextResponse.json({ error: 'Species not found' }, { status: 404 });
-		}
-
-		return NextResponse.json(data);
+		const body = await request.json();
+		
+		// Get repository from factory
+		const repository = SpeciesFactory.getRepository();
+		
+		// Update species
+		const updatedSpecies = await repository.updateSpecies(id, body);
+		
+		return NextResponse.json(updatedSpecies);
 	} catch (error) {
-		console.error('Error updating species:', error);
-		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+		console.error(`Error in PATCH /api/species/${(await params).id}:`, error);
+		return NextResponse.json(
+			{ error: 'Failed to update species' },
+			{ status: 500 }
+		);
 	}
 }
 
-// DELETE /api/species/[id] - Delete a specific species (for admin use)
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+// DELETE /api/species/[id] - Delete species (admin only)
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: Promise<{ id: string }> }
+) {
 	try {
-		const id = params.id;
-
-		// Delete the species
-		const { error } = await supabase.from('species').delete().eq('id', id);
-
-		if (error) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
+		const { id: idParam } = await params;
+		const id = Number.parseInt(idParam);
+		
+		if (isNaN(id)) {
+			return NextResponse.json(
+				{ error: 'Invalid species ID' },
+				{ status: 400 }
+			);
 		}
 
-		return NextResponse.json({ message: 'Species deleted successfully' });
+		// Get repository from factory
+		const repository = SpeciesFactory.getRepository();
+		
+		// Delete species
+		await repository.deleteSpecies(id);
+		
+		return NextResponse.json({ success: true });
 	} catch (error) {
-		console.error('Error deleting species:', error);
-		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+		console.error(`Error in DELETE /api/species/${(await params).id}:`, error);
+		return NextResponse.json(
+			{ error: 'Failed to delete species' },
+			{ status: 500 }
+		);
 	}
 }

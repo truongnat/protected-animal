@@ -1,5 +1,6 @@
 import SearchBar from '@/components/SearchBar';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
+import SpeciesCard from '@/components/ui/SpeciesCard';
 import { Species } from '@/lib/core/domain/entities/species';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import Link from 'next/link';
@@ -63,14 +64,15 @@ async function getFilterOptions() {
 export default async function SpeciesPage({
 	searchParams,
 }: {
-	searchParams: SearchParams;
+	searchParams: Promise<SearchParams>;
 }) {
+	const params = await searchParams;
 	// Create a serializable version of searchParams
 	const serializedParams: SearchParams = {
-		region: searchParams.region,
-		status: searchParams.status,
-		page: searchParams.page,
-		search: searchParams.search,
+		region: params.region,
+		status: params.status,
+		page: params.page,
+		search: params.search,
 	};
 
 	const { species, count, totalPages, currentPage } = await getSpeciesData(serializedParams);
@@ -205,58 +207,23 @@ export default async function SpeciesPage({
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 							{species.length > 0 ? (
 								species.map((animal) => (
-									<div
-										key={animal.id}
-										className="bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105"
-									>
-										<div className="h-48 bg-gray-200 relative overflow-hidden">
-											<ImageWithFallback
-												src={animal.image_url || ''}
-												alt={animal.name}
-												altText={animal.name}
-												fill
-												sizes="(max-width: 768px) 100vw, 33vw"
-												className="object-cover"
-												unoptimized
-											/>
-										</div>
-										<div className="p-6">
-											<div className="flex justify-between items-start mb-2">
-												<h3 className="text-xl font-semibold text-gray-900">{animal.name}</h3>
-												<span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
-													{animal.conservation_status}
-												</span>
-											</div>
-											<p className="text-sm text-gray-500 italic mb-3">{animal.scientific_name}</p>
-											<div className="flex items-center mb-3">
-												<div className="w-full bg-gray-200 rounded-full h-2.5">
-													<div
-														className="bg-red-600 h-2.5 rounded-full"
-														style={{
-															width: animal.conservation_status.includes('Critical')
-																? '95%'
-																: animal.conservation_status.includes('Endangered')
-																	? '85%'
-																	: animal.conservation_status.includes('Vulnerable')
-																		? '70%'
-																		: '50%',
-														}}
-													/>
-												</div>
-											</div>
-											<p className="text-gray-600 mb-4 line-clamp-3">{animal.description}</p>
-											<Link
-												href={`/species/${animal.id}`}
-												className="text-green-700 hover:text-green-900 font-medium"
-											>
-												Learn more →
-											</Link>
-										</div>
-									</div>
+									<SpeciesCard 
+										key={animal.id} 
+										species={{
+											...animal,
+											threats: ['Habitat Loss', 'Poaching', 'Climate Change'], // Mock data
+											population: Math.floor(Math.random() * 1000) + 50, // Mock data
+											region: animal.region || 'Vietnam', // Default region
+										}} 
+										language="en"
+										showActions={true}
+									/>
 								))
 							) : (
-								<div className="col-span-3 text-center py-8">
-									<p className="text-gray-500">No species found matching your criteria.</p>
+								<div className="col-span-3 text-center py-12">
+									<div className="text-6xl mb-4">🔍</div>
+									<p className="text-gray-500 text-lg">No species found matching your criteria.</p>
+									<p className="text-gray-400 text-sm mt-2">Try adjusting your filters or search terms.</p>
 								</div>
 							)}
 						</div>

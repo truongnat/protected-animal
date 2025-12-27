@@ -6,15 +6,28 @@ import { type FormEvent, useState } from 'react';
 interface SearchBarProps {
 	placeholder?: string;
 	className?: string;
+	onSearch?: (search: string) => void;
+	defaultValue?: string;
 }
 
-export default function SearchBar({ placeholder = 'Search...', className = '' }: SearchBarProps) {
+export default function SearchBar({ 
+	placeholder = 'Search...', 
+	className = '', 
+	onSearch,
+	defaultValue 
+}: SearchBarProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+	const [searchTerm, setSearchTerm] = useState(defaultValue || searchParams.get('search') || '');
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
+		// Call onSearch callback if provided
+		if (onSearch) {
+			onSearch(searchTerm);
+			return;
+		}
 
 		// Create a new URLSearchParams object from the current search params
 		const params = new URLSearchParams(searchParams.toString());

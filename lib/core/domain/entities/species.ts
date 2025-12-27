@@ -9,6 +9,7 @@ export interface Species {
 	image_url: string;
 	region: string;
 	created_at: string;
+	threats?: string[];
 }
 
 export interface SpeciesFilters {

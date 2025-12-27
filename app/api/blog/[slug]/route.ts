@@ -9,9 +9,9 @@ import html from 'remark-html';
 const contentDirectory = path.join(process.cwd(), 'content', 'blog');
 
 // GET /api/blog/[slug] - Get a specific blog post by slug
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	try {
-		const slug = params.slug;
+		const { slug } = await params;
 
 		// Check if the file exists with .mdx extension
 		const mdxPath = path.join(contentDirectory, `${slug}.mdx`);

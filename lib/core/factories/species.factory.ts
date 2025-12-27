@@ -1,4 +1,4 @@
-import { SupabaseSpeciesRepository } from '../../supabase/species.repository';
+import { SQLiteSpeciesRepository } from '../../sqlite/species.repository';
 import type { SpeciesRepository } from '../domain/entities/species';
 import { GetAllSpeciesUseCase } from '../usecases/species/get-all-species.usecase';
 import { GetFeaturedSpeciesUseCase } from '../usecases/species/get-featured-species.usecase';
@@ -18,7 +18,7 @@ export class SpeciesFactory {
 	 */
 	static getRepository(): SpeciesRepository {
 		if (!this.repository) {
-			this.repository = new SupabaseSpeciesRepository();
+			this.repository = new SQLiteSpeciesRepository();
 		}
 		return this.repository;
 	}

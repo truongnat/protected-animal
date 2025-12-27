@@ -26,13 +26,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 			readingTime: data.readingTime,
 			tags: data.tags,
 			image: data.image || DEFAULT_IMAGES.featured,
-			author: data.author
-				? {
-						name: data.author.name,
-						avatar: data.author.avatar || DEFAULT_IMAGES.author,
-						bio: data.author.bio,
-					}
-				: undefined,
+			author: data.author?.name || 'Anonymous',
 		};
 	} catch (error) {
 		return null;

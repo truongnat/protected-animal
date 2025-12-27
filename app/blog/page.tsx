@@ -93,7 +93,7 @@ export default async function BlogPage() {
 										</CardDescription>
 									</CardHeader>
 									<CardContent>
-										<p className="text-muted-foreground">{post.excerpt || post.description}</p>
+										<p className="text-muted-foreground">{post.description}</p>
 									</CardContent>
 								</Card>
 							</Link>

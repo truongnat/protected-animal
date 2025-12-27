@@ -4,6 +4,7 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/components/theme-provider';
+import QueryProvider from '@/components/providers/QueryProvider';
 import { Toaster } from 'sonner';
 
 const poppins = Poppins({
@@ -25,16 +26,18 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={poppins.className}>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					<Navbar />
-					{children}
-					<Footer />
-				</ThemeProvider>
+				<QueryProvider>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<Navbar />
+						{children}
+						<Footer />
+					</ThemeProvider>
+				</QueryProvider>
 				<Toaster />
 			</body>
 		</html>

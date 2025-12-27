@@ -37,8 +37,9 @@ async function getRelatedSpecies(species: Species, limit = 3): Promise<Species[]
 	}
 }
 
-export default async function SpeciesDetailPage({ params }: { params: { id: string } }) {
-	const species = await getSpeciesById(params.id);
+export default async function SpeciesDetailPage({ params }: { params: Promise<{ id: string }> }) {
+	const { id } = await params;
+	const species = await getSpeciesById(id);
 
 	if (!species) {
 		notFound();

@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 		// Filter by tag if provided
 		if (tag) {
 			posts = posts.filter(
-				(post) => post.tags && post.tags.some((t) => t.toLowerCase() === tag.toLowerCase()),
+				(post) => post.tags && post.tags.some((t: string) => t.toLowerCase() === tag.toLowerCase()),
 			);
 		}
 
