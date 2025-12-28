@@ -186,7 +186,7 @@ export default async function SpeciesDetailPage({ params }: { params: Promise<{ 
 									{relatedSpecies.map((related) => (
 										<Link
 											key={related.id}
-											href={`/landing/species/${related.id}`}
+											href={`/species/${related.id}`}
 											className="group"
 										>
 											<div className="bg-white rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
@@ -215,7 +215,7 @@ export default async function SpeciesDetailPage({ params }: { params: Promise<{ 
 
 						<div className="mt-8 text-center">
 							<Link
-								href="/landing/species"
+								href="/species"
 								className="inline-flex items-center text-green-700 hover:text-green-900"
 							>
 								<svg

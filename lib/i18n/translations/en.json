@@ -1,0 +1,188 @@
+{
+  "nav": {
+    "home": "Home",
+    "species": "Species",
+    "report": "Report",
+    "donate": "Donate",
+    "blog": "Blog",
+    "about": "About"
+  },
+  "hero": {
+    "title": "Protecting Vietnam's Wildlife",
+    "subtitle": "Join us in conserving endangered species and preserving biodiversity for future generations",
+    "cta": {
+      "report": "Report Wildlife Crime",
+      "explore": "Explore Species",
+      "donate": "Support Conservation"
+    },
+    "stats": {
+      "species": "300+ Mammal Species",
+      "endangered": "1/3 At Risk",
+      "protected": "Protected by Law"
+    },
+    "legal": "Vietnam's 2017 Penal Code: Up to 15 years imprisonment for wildlife crimes"
+  },
+  "mission": {
+    "title": "Our Conservation Mission",
+    "subtitle": "Protecting Vietnam's rich biodiversity through education, enforcement, and community engagement",
+    "cards": {
+      "protect": {
+        "title": "Protect Wildlife, Preserve Our Future",
+        "description": "Every action we take today shapes the world we leave for tomorrow. Vietnam's wildlife needs our protection now."
+      },
+      "educate": {
+        "title": "Education & Awareness",
+        "description": "Building understanding and respect for Vietnam's unique biodiversity through community programs."
+      },
+      "enforce": {
+        "title": "Law Enforcement Support",
+        "description": "Working with authorities to combat illegal wildlife trade and habitat destruction."
+      },
+      "community": {
+        "title": "Community Engagement",
+        "description": "Empowering local communities to become guardians of their natural heritage."
+      }
+    }
+  },
+  "species": {
+    "featured": "Featured Species",
+    "viewAll": "View All Species",
+    "status": {
+      "criticallyEndangered": "Critically Endangered",
+      "endangered": "Endangered",
+      "vulnerable": "Vulnerable",
+      "nearThreatened": "Near Threatened",
+      "leastConcern": "Least Concern"
+    },
+    "actions": {
+      "report": "Report Sighting",
+      "support": "Support Protection",
+      "learn": "Learn More"
+    }
+  },
+  "reporting": {
+    "title": "Report Wildlife Crime",
+    "subtitle": "Help protect Vietnam's wildlife by reporting illegal activities",
+    "emergency": "Emergency Hotline: 1900-1234",
+    "actions": {
+      "emergency": {
+        "label": "Emergency Report",
+        "desc": "Immediate wildlife crime in progress"
+      },
+      "evidence": {
+        "label": "Evidence Upload",
+        "desc": "Submit photos/videos of violations"
+      },
+      "location": {
+        "label": "Location Report",
+        "desc": "Report suspicious activities by location"
+      },
+      "anonymous": {
+        "label": "Anonymous Tip",
+        "desc": "Share information anonymously"
+      }
+    },
+    "stats": {
+      "reports": "Reports Submitted",
+      "resolved": "Cases Resolved",
+      "pending": "Under Investigation"
+    },
+    "form": {
+      "title": "Submit a Report",
+      "type": "Type of Report",
+      "typeRequired": "Type of Report *",
+      "selectType": "Select report type",
+      "types": {
+        "poaching": "Poaching Activity",
+        "trafficking": "Wildlife Trafficking",
+        "habitat": "Habitat Destruction",
+        "captivity": "Illegal Captivity",
+        "trade": "Illegal Trade",
+        "other": "Other"
+      },
+      "location": "Location",
+      "locationPlaceholder": "Enter specific location or coordinates",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide detailed description of the incident",
+      "evidence": "Evidence",
+      "evidenceHelp": "Upload photos, videos, or documents (Max 10MB each)",
+      "contact": "Contact Information (Optional)",
+      "contactPlaceholder": "Your phone or email for follow-up",
+      "anonymous": "Submit anonymously",
+      "legal": "Legal Notice: False reports may result in legal consequences under Vietnamese law.",
+      "submit": "Submit Report",
+      "submitting": "Submitting..."
+    }
+  },
+  "conservation": {
+    "title": "Conservation Impact in Vietnam",
+    "subtitle": "Real progress in protecting Vietnam's biodiversity",
+    "metrics": {
+      "tigers": "Tigers Protected",
+      "saola": "Saola Sightings",
+      "hectares": "Hectares Protected",
+      "educated": "People Educated"
+    },
+    "partnerships": {
+      "title": "Our Partners",
+      "wwf": "WWF Vietnam",
+      "svw": "Save Vietnam's Wildlife",
+      "fpd": "Forest Protection Dept",
+      "iucn": "IUCN Vietnam"
+    },
+    "recentWins": {
+      "title": "Recent Conservation Wins",
+      "pangolin": "Successful pangolin rescue operation in Ha Long Bay",
+      "patrol": "Anti-poaching patrol prevented 12 illegal hunting attempts",
+      "education": "Community education program reached 5,000 students",
+      "habitat": "New 2,500-hectare protected area established in Central Highlands"
+    },
+    "cta": {
+      "title": "Join Our Conservation Efforts",
+      "subtitle": "Every action counts in protecting Vietnam's precious wildlife",
+      "donate": "Donate",
+      "volunteer": "Volunteer"
+    }
+  },
+  "footer": {
+    "description": "Dedicated to protecting Vietnam's endangered wildlife through conservation, education, and community engagement.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2024 Vietnam Wildlife Conservation. All rights reserved."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "english": "English",
+    "vietnamese": "Vietnamese",
+    "toggle": "Toggle language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Try again",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "page": "Page",
+    "of": "of",
+    "results": "results",
+    "noResults": "No results found"
+  }
+}

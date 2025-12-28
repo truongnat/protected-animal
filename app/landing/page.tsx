@@ -13,20 +13,20 @@ export default async function Home() {
 	const species = await getFeaturedSpeciesUseCase.execute(6);
 
 	return (
-		<div className="bg-white">
+		<div className="bg-white dark:bg-gray-900">
 			{/* Vietnam-specific Hero Section */}
-			<VietnamHeroSection language="en" />
+			<VietnamHeroSection />
 
 			{/* Vietnam Conservation Mission */}
-			<section className="py-16 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100">
+			<section className="py-16 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-950/20 dark:via-emerald-950/20 dark:to-green-950/20">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="text-center mb-12">
-						<div className="inline-flex items-center gap-2 bg-green-100 rounded-full px-4 py-2 mb-4">
+						<div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/30 rounded-full px-4 py-2 mb-4">
 							<span className="text-2xl">🇻🇳</span>
-							<span className="text-sm font-medium text-green-800">Vietnam Wildlife Conservation</span>
+							<span className="text-sm font-medium text-green-800 dark:text-green-200">Vietnam Wildlife Conservation</span>
 						</div>
-						<h2 className="text-4xl font-bold text-gray-900 mb-4">Our Conservation Mission</h2>
-						<p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+						<h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Our Conservation Mission</h2>
+						<p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
 							Protecting Vietnam's rich biodiversity through education, enforcement, and community engagement
 						</p>
 					</div>
@@ -34,17 +34,17 @@ export default async function Home() {
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 						{/* Main Mission Cards */}
 						<div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div className="bg-white p-8 rounded-2xl shadow-lg border border-green-100 hover:shadow-xl transition-shadow">
+							<div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-green-100 dark:border-green-800 hover:shadow-xl transition-shadow">
 								<div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									🛡️
 								</div>
-								<h3 className="text-xl font-bold mb-3 text-center">Protect Wildlife, Preserve Our Future</h3>
-								<p className="text-gray-600 text-center leading-relaxed">
+								<h3 className="text-xl font-bold mb-3 text-center dark:text-gray-100">Protect Wildlife, Preserve Our Future</h3>
+								<p className="text-gray-600 dark:text-gray-300 text-center leading-relaxed">
 									Every action we take today shapes the world we leave for tomorrow. Vietnam's wildlife needs our protection now.
 								</p>
 							</div>
 							
-							<div className="bg-white p-8 rounded-2xl shadow-lg border border-green-100 hover:shadow-xl transition-shadow">
+							<div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-green-100 dark:border-green-800 hover:shadow-xl transition-shadow">
 								<div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									🌿
 								</div>

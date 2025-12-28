@@ -4,6 +4,7 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/components/theme-provider';
+import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import QueryProvider from '@/components/providers/QueryProvider';
 import { Toaster } from 'sonner';
 
@@ -24,18 +25,20 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="vi" suppressHydrationWarning>
 			<body className={poppins.className}>
 				<QueryProvider>
 					<ThemeProvider
 						attribute="class"
-						defaultTheme="system"
+						defaultTheme="light"
 						enableSystem
 						disableTransitionOnChange
 					>
-						<Navbar />
-						{children}
-						<Footer />
+						<LanguageProvider>
+							<Navbar />
+							{children}
+							<Footer />
+						</LanguageProvider>
 					</ThemeProvider>
 				</QueryProvider>
 				<Toaster />

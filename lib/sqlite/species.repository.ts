@@ -191,6 +191,36 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 		}
 	}
 
+	async getRelatedSpecies(speciesId: number, region: string, status: string, limit = 3): Promise<Species[]> {
+		try {
+			// Get related species by matching region or conservation status
+			// Prioritize same region, then same status, exclude the current species
+			const result = await db
+				.select()
+				.from(species)
+				.where(
+					and(
+						sql`${species.id} != ${speciesId}`,
+						or(
+							eq(species.region, region),
+							eq(species.conservationStatus, status)
+						)
+					)
+				)
+				.orderBy(
+					// Prioritize species with same region
+					sql`CASE WHEN ${species.region} = ${region} THEN 0 ELSE 1 END`,
+					species.name
+				)
+				.limit(limit);
+
+			return result.map(this.mapToSpecies);
+		} catch (error) {
+			console.error(`Error fetching related species for id ${speciesId}:`, error);
+			return [];
+		}
+	}
+
 	async createSpecies(speciesData: Omit<Species, 'id' | 'created_at'>): Promise<Species> {
 		try {
 			const result = await db

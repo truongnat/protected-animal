@@ -1,33 +1,52 @@
+'use client';
+
+import { useTranslation } from '@/lib/i18n/useTranslation';
 import Link from 'next/link';
 
 export default function Footer() {
+	const { t } = useTranslation();
+
 	return (
-		<footer className="bg-green-900 text-white">
+		<footer className="bg-green-900 dark:bg-gray-900 text-white">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Protected Animals</h3>
+						<h3 className="text-lg font-semibold mb-4">Vietnam Wildlife Conservation</h3>
 						<p className="text-sm text-gray-300">
-							Dedicated to raising awareness about endangered species and promoting conservation
-							efforts worldwide.
+							{t('footer.description')}
 						</p>
 					</div>
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+						<h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
 						<ul className="space-y-2">
 							<li>
-								<Link href="/" className="text-sm text-gray-300 hover:text-white">
-									Home
+								<Link href="/landing" className="text-sm text-gray-300 hover:text-white">
+									{t('nav.home')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/landing/species" className="text-sm text-gray-300 hover:text-white">
-									Endangered Species
+								<Link href="/species" className="text-sm text-gray-300 hover:text-white">
+									{t('nav.species')}
+								</Link>
+							</li>
+							<li>
+								<Link href="/report" className="text-sm text-gray-300 hover:text-white">
+									{t('nav.report')}
+								</Link>
+							</li>
+							<li>
+								<Link href="/donate" className="text-sm text-gray-300 hover:text-white">
+									{t('nav.donate')}
 								</Link>
 							</li>
 							<li>
 								<Link href="/blog" className="text-sm text-gray-300 hover:text-white">
-									Blog
+									{t('nav.blog')}
+								</Link>
+							</li>
+							<li>
+								<Link href="/about" className="text-sm text-gray-300 hover:text-white">
+									{t('nav.about')}
 								</Link>
 							</li>
 						</ul>
@@ -57,18 +76,18 @@ export default function Footer() {
 							</li>
 							<li>
 								<a
-									href="https://www.nationalgeographic.com/animals/"
+									href="https://env4wildlife.org/"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-sm text-gray-300 hover:text-white"
 								>
-									National Geographic
+									Education For Nature - Vietnam
 								</a>
 							</li>
 						</ul>
 					</div>
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Connect</h3>
+						<h3 className="text-lg font-semibold mb-4">{t('footer.contact')}</h3>
 						<div className="flex space-x-4">
 							<a href="#" className="text-gray-300 hover:text-white">
 								<span className="sr-only">Facebook</span>
@@ -101,14 +120,14 @@ export default function Footer() {
 				</div>
 				<div className="mt-8 border-t border-gray-700 pt-8 flex justify-between">
 					<p className="text-sm text-gray-300">
-						&copy; {new Date().getFullYear()} Protected Animals. All rights reserved.
+						{t('footer.copyright')}
 					</p>
 					<div className="flex space-x-6">
 						<Link href="/privacy" className="text-sm text-gray-300 hover:text-white">
-							Privacy Policy
+							{t('footer.privacy')}
 						</Link>
 						<Link href="/terms" className="text-sm text-gray-300 hover:text-white">
-							Terms of Service
+							{t('footer.terms')}
 						</Link>
 					</div>
 				</div>

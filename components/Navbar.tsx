@@ -1,5 +1,7 @@
 'use client';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -21,10 +23,11 @@ const navs: Nav[] = [
 
 export default function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [language, setLanguage] = useState<'en' | 'vi'>('en');
+	const { language, setLanguage } = useLanguage();
+	const { t } = useTranslation();
 
 	const toggleLanguage = () => {
-		setLanguage(prev => prev === 'en' ? 'vi' : 'en');
+		setLanguage(language === 'en' ? 'vi' : 'en');
 	};
 
 	return (

@@ -35,6 +35,7 @@ export interface SpeciesRepository {
 	getSpeciesWithFilters(filters: SpeciesFilters): Promise<SpeciesWithPaginationResult>;
 	getUniqueRegions(): Promise<string[]>;
 	getUniqueStatuses(): Promise<string[]>;
+	getRelatedSpecies(speciesId: number, region: string, status: string, limit?: number): Promise<Species[]>;
 	createSpecies(species: Omit<Species, 'id' | 'created_at'>): Promise<Species>;
 	updateSpecies(id: number, species: Partial<Species>): Promise<Species>;
 	deleteSpecies(id: number): Promise<void>;

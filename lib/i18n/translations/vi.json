@@ -1,0 +1,188 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "species": "Loài động vật",
+    "report": "Báo cáo",
+    "donate": "Quyên góp",
+    "blog": "Tin tức",
+    "about": "Giới thiệu"
+  },
+  "hero": {
+    "title": "Bảo vệ động vật hoang dã Việt Nam",
+    "subtitle": "Cùng chúng tôi bảo tồn các loài có nguy cơ tuyệt chủng và bảo vệ đa dạng sinh học cho thế hệ tương lai",
+    "cta": {
+      "report": "Báo cáo tội phạm động vật",
+      "explore": "Khám phá các loài",
+      "donate": "Ủng hộ bảo tồn"
+    },
+    "stats": {
+      "species": "Hơn 300 loài động vật có vú",
+      "endangered": "1/3 có nguy cơ tuyệt chủng",
+      "protected": "Được bảo vệ bởi pháp luật"
+    },
+    "legal": "Bộ luật hình sự Việt Nam 2017: Tù đến 15 năm cho tội phạm động vật hoang dã"
+  },
+  "mission": {
+    "title": "Sứ mệnh bảo tồn của chúng tôi",
+    "subtitle": "Bảo vệ đa dạng sinh học phong phú của Việt Nam thông qua giáo dục, thực thi pháp luật và sự tham gia của cộng đồng",
+    "cards": {
+      "protect": {
+        "title": "Bảo vệ động vật hoang dã, bảo tồn tương lai",
+        "description": "Mọi hành động chúng ta thực hiện hôm nay sẽ định hình thế giới mà chúng ta để lại cho mai sau. Động vật hoang dã Việt Nam cần được bảo vệ ngay bây giờ."
+      },
+      "educate": {
+        "title": "Giáo dục & Nâng cao nhận thức",
+        "description": "Xây dựng sự hiểu biết và tôn trọng đối với đa dạng sinh học độc đáo của Việt Nam thông qua các chương trình cộng đồng."
+      },
+      "enforce": {
+        "title": "Hỗ trợ thực thi pháp luật",
+        "description": "Hợp tác với các cơ quan chức năng để chống lại buôn bán bất hợp pháp động vật hoang dã và phá hủy môi trường sống."
+      },
+      "community": {
+        "title": "Sự tham gia của cộng đồng",
+        "description": "Trao quyền cho cộng đồng địa phương trở thành những người bảo vệ di sản thiên nhiên của họ."
+      }
+    }
+  },
+  "species": {
+    "featured": "Các loài nổi bật",
+    "viewAll": "Xem tất cả các loài",
+    "status": {
+      "criticallyEndangered": "Cực kỳ nguy cấp",
+      "endangered": "Nguy cấp",
+      "vulnerable": "Dễ bị tổn thương",
+      "nearThreatened": "Gần bị đe dọa",
+      "leastConcern": "Ít quan tâm"
+    },
+    "actions": {
+      "report": "Báo cáo phát hiện",
+      "support": "Ủng hộ bảo vệ",
+      "learn": "Tìm hiểu thêm"
+    }
+  },
+  "reporting": {
+    "title": "Báo cáo tội phạm động vật hoang dã",
+    "subtitle": "Giúp bảo vệ động vật hoang dã Việt Nam bằng cách báo cáo các hoạt động bất hợp pháp",
+    "emergency": "Đường dây nóng khẩn cấp: 1900-1234",
+    "actions": {
+      "emergency": {
+        "label": "Báo cáo khẩn cấp",
+        "desc": "Tội phạm động vật đang diễn ra"
+      },
+      "evidence": {
+        "label": "Tải bằng chứng",
+        "desc": "Gửi ảnh/video vi phạm"
+      },
+      "location": {
+        "label": "Báo cáo vị trí",
+        "desc": "Báo cáo hoạt động đáng nghi theo vị trí"
+      },
+      "anonymous": {
+        "label": "Tin ẩn danh",
+        "desc": "Chia sẻ thông tin ẩn danh"
+      }
+    },
+    "stats": {
+      "reports": "Báo cáo đã gửi",
+      "resolved": "Vụ việc đã giải quyết",
+      "pending": "Đang điều tra"
+    },
+    "form": {
+      "title": "Gửi báo cáo",
+      "type": "Loại báo cáo",
+      "typeRequired": "Loại báo cáo *",
+      "selectType": "Chọn loại báo cáo",
+      "types": {
+        "poaching": "Hoạt động săn trộm",
+        "trafficking": "Buôn bán động vật hoang dã",
+        "habitat": "Phá hủy môi trường sống",
+        "captivity": "Nuôi nhốt bất hợp pháp",
+        "trade": "Buôn bán bất hợp pháp",
+        "other": "Khác"
+      },
+      "location": "Vị trí",
+      "locationPlaceholder": "Nhập vị trí cụ thể hoặc tọa độ",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Cung cấp mô tả chi tiết về sự việc",
+      "evidence": "Bằng chứng",
+      "evidenceHelp": "Tải lên ảnh, video hoặc tài liệu (Tối đa 10MB mỗi file)",
+      "contact": "Thông tin liên hệ (Tùy chọn)",
+      "contactPlaceholder": "Số điện thoại hoặc email để liên hệ lại",
+      "anonymous": "Gửi ẩn danh",
+      "legal": "Thông báo pháp lý: Báo cáo sai sự thật có thể dẫn đến hậu quả pháp lý theo luật pháp Việt Nam.",
+      "submit": "Gửi báo cáo",
+      "submitting": "Đang gửi..."
+    }
+  },
+  "conservation": {
+    "title": "Tác động bảo tồn tại Việt Nam",
+    "subtitle": "Tiến bộ thực sự trong việc bảo vệ đa dạng sinh học của Việt Nam",
+    "metrics": {
+      "tigers": "Hổ được bảo vệ",
+      "saola": "Phát hiện Sao la",
+      "hectares": "Hecta được bảo vệ",
+      "educated": "Người được giáo dục"
+    },
+    "partnerships": {
+      "title": "Đối tác của chúng tôi",
+      "wwf": "WWF Việt Nam",
+      "svw": "Cứu hộ động vật hoang dã Việt Nam",
+      "fpd": "Cục Kiểm lâm",
+      "iucn": "IUCN Việt Nam"
+    },
+    "recentWins": {
+      "title": "Thành tựu bảo tồn gần đây",
+      "pangolin": "Chiến dịch cứu hộ tê tê thành công tại Vịnh Hạ Long",
+      "patrol": "Tuần tra chống săn trộm đã ngăn chặn 12 vụ săn bắt bất hợp pháp",
+      "education": "Chương trình giáo dục cộng đồng đã tiếp cận 5.000 học sinh",
+      "habitat": "Khu bảo tồn mới 2.500 hecta được thành lập tại Tây Nguyên"
+    },
+    "cta": {
+      "title": "Tham gia nỗ lực bảo tồn",
+      "subtitle": "Mọi hành động đều có ý nghĩa trong việc bảo vệ động vật quý hiếm Việt Nam",
+      "donate": "Quyên góp",
+      "volunteer": "Tình nguyện"
+    }
+  },
+  "footer": {
+    "description": "Tận tâm bảo vệ động vật hoang dã có nguy cơ tuyệt chủng của Việt Nam thông qua bảo tồn, giáo dục và sự tham gia của cộng đồng.",
+    "quickLinks": "Liên kết nhanh",
+    "legal": "Pháp lý",
+    "contact": "Liên hệ",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "copyright": "© 2024 Bảo tồn động vật hoang dã Việt Nam. Tất cả quyền được bảo lưu."
+  },
+  "theme": {
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống",
+    "toggle": "Chuyển đổi chủ đề"
+  },
+  "language": {
+    "english": "Tiếng Anh",
+    "vietnamese": "Tiếng Việt",
+    "toggle": "Chuyển đổi ngôn ngữ"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "retry": "Thử lại",
+    "close": "Đóng",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "submit": "Gửi",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "view": "Xem",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "sort": "Sắp xếp",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "page": "Trang",
+    "of": "của",
+    "results": "kết quả",
+    "noResults": "Không tìm thấy kết quả"
+  }
+}

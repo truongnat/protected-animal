@@ -1,6 +1,7 @@
 'use client';
 
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 import type { Species } from '@/lib/core/domain/entities/species';
 import Link from 'next/link';
 
@@ -18,19 +19,21 @@ const statusColors = {
 	'Least Concern': { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', progress: '20%' },
 };
 
-const vietnameseStatus = {
-	'Critically Endangered': 'Cực kỳ nguy cấp',
-	'Endangered': 'Nguy cấp',
-	'Vulnerable': 'Dễ bị tổn thương',
-	'Near Threatened': 'Gần bị đe dọa',
-	'Least Concern': 'Ít quan tâm',
-};
-
-export default function SpeciesCard({ species, language = 'en', showActions = false }: SpeciesCardProps) {
+export default function SpeciesCard({ species, language, showActions = false }: SpeciesCardProps) {
+	const { t } = useTranslation();
 	const statusStyle = statusColors[species.conservation_status as keyof typeof statusColors] || statusColors['Least Concern'];
-	const statusText = language === 'vi' 
-		? vietnameseStatus[species.conservation_status as keyof typeof vietnameseStatus] || species.conservation_status
-		: species.conservation_status;
+	
+	// Map conservation status to translation keys
+	const getStatusTranslation = (status: string) => {
+		const statusMap: { [key: string]: string } = {
+			'Critically Endangered': 'species.status.criticallyEndangered',
+			'Endangered': 'species.status.endangered',
+			'Vulnerable': 'species.status.vulnerable',
+			'Near Threatened': 'species.status.nearThreatened',
+			'Least Concern': 'species.status.leastConcern',
+		};
+		return t(statusMap[status] || status);
+	};
 
 	return (
 		<div className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
@@ -49,7 +52,7 @@ export default function SpeciesCard({ species, language = 'en', showActions = fa
 				{/* Status Badge */}
 				<div className="absolute top-3 right-3">
 					<span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border} border backdrop-blur-sm`}>
-						{statusText}
+						{getStatusTranslation(species.conservation_status)}
 					</span>
 				</div>
 
