@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema';
 
-const sqlite = new Database('./data/app.db');
+const DATABASE_PATH = process.env.DATABASE_PATH || './data/protected-animals.db';
+const sqlite = new Database(DATABASE_PATH);
 export const db = drizzle(sqlite, { schema }); 
 export { sqlite };

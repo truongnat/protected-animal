@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
+import { AuthProvider } from '@/lib/contexts/AuthContext';
 import QueryProvider from '@/components/providers/QueryProvider';
 import { Toaster } from 'sonner';
 
@@ -35,9 +36,11 @@ export default function RootLayout({
 						disableTransitionOnChange
 					>
 						<LanguageProvider>
-							<Navbar />
-							{children}
-							<Footer />
+							<AuthProvider>
+								<Navbar />
+								{children}
+								<Footer />
+							</AuthProvider>
 						</LanguageProvider>
 					</ThemeProvider>
 				</QueryProvider>

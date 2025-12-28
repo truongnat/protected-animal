@@ -7,12 +7,12 @@ export default function Footer() {
 	const { t } = useTranslation();
 
 	return (
-		<footer className="bg-green-900 dark:bg-gray-900 text-white">
+		<footer className="border-t bg-background">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 					<div>
 						<h3 className="text-lg font-semibold mb-4">Vietnam Wildlife Conservation</h3>
-						<p className="text-sm text-gray-300">
+						<p className="text-sm text-muted-foreground">
 							{t('footer.description')}
 						</p>
 					</div>
@@ -20,32 +20,32 @@ export default function Footer() {
 						<h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
 						<ul className="space-y-2">
 							<li>
-								<Link href="/landing" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/landing" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.home')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/species" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/species" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.species')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/report" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/report" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.report')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/donate" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/donate" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.donate')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/blog" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.blog')}
 								</Link>
 							</li>
 							<li>
-								<Link href="/about" className="text-sm text-gray-300 hover:text-white">
+								<Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
 									{t('nav.about')}
 								</Link>
 							</li>
@@ -59,7 +59,7 @@ export default function Footer() {
 									href="https://www.worldwildlife.org/"
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-sm text-gray-300 hover:text-white"
+									className="text-sm text-muted-foreground hover:text-foreground"
 								>
 									World Wildlife Fund
 								</a>
@@ -69,7 +69,7 @@ export default function Footer() {
 									href="https://www.iucn.org/"
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-sm text-gray-300 hover:text-white"
+									className="text-sm text-muted-foreground hover:text-foreground"
 								>
 									IUCN Red List
 								</a>
@@ -79,7 +79,7 @@ export default function Footer() {
 									href="https://env4wildlife.org/"
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-sm text-gray-300 hover:text-white"
+									className="text-sm text-muted-foreground hover:text-foreground"
 								>
 									Education For Nature - Vietnam
 								</a>
@@ -89,7 +89,7 @@ export default function Footer() {
 					<div>
 						<h3 className="text-lg font-semibold mb-4">{t('footer.contact')}</h3>
 						<div className="flex space-x-4">
-							<a href="#" className="text-gray-300 hover:text-white">
+							<a href="#" className="text-muted-foreground hover:text-foreground">
 								<span className="sr-only">Facebook</span>
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path
@@ -99,7 +99,7 @@ export default function Footer() {
 									/>
 								</svg>
 							</a>
-							<a href="#" className="text-gray-300 hover:text-white">
+							<a href="#" className="text-muted-foreground hover:text-foreground">
 								<span className="sr-only">Instagram</span>
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path
@@ -109,7 +109,7 @@ export default function Footer() {
 									/>
 								</svg>
 							</a>
-							<a href="#" className="text-gray-300 hover:text-white">
+							<a href="#" className="text-muted-foreground hover:text-foreground">
 								<span className="sr-only">Twitter</span>
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
@@ -118,15 +118,15 @@ export default function Footer() {
 						</div>
 					</div>
 				</div>
-				<div className="mt-8 border-t border-gray-700 pt-8 flex justify-between">
-					<p className="text-sm text-gray-300">
+				<div className="mt-8 border-t pt-8 flex justify-between">
+					<p className="text-sm text-muted-foreground">
 						{t('footer.copyright')}
 					</p>
 					<div className="flex space-x-6">
-						<Link href="/privacy" className="text-sm text-gray-300 hover:text-white">
+						<Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
 							{t('footer.privacy')}
 						</Link>
-						<Link href="/terms" className="text-sm text-gray-300 hover:text-white">
+						<Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
 							{t('footer.terms')}
 						</Link>
 					</div>
