@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import { AlertTriangle, CheckCircle2, Info, XCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface CalloutProps {
 	children: React.ReactNode;

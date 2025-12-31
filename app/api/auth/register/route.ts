@@ -3,154 +3,224 @@
  * POST /api/auth/register
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { eq } from 'drizzle-orm';
+import { cookies } from 'next/headers';
+import { type NextRequest, NextResponse } from 'next/server';
+import { generateTokens } from '@/lib/auth/jwt';
+import { hashPassword, validatePasswordStrength } from '@/lib/auth/password';
 import { db } from '@/lib/db';
 import { users } from '@/lib/schema';
-import { hashPassword, validatePasswordStrength } from '@/lib/auth/password';
-import { generateTokens } from '@/lib/auth/jwt';
-import { eq } from 'drizzle-orm';
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { email, password, fullName } = body;
+/**
+ * Registration request body interface
+ */
+interface RegisterRequestBody {
+	email: string;
+	password: string;
+	fullName?: string;
+}
 
-    // Validate required fields
-    if (!email || !password) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Email and password are required',
-          },
-        },
-        { status: 400 }
-      );
-    }
+/**
+ * Registration response data interface
+ */
+interface RegisterResponseData {
+	user: {
+		id: number;
+		email: string;
+		fullName: string | null;
+		role: string;
+		emailVerified: boolean;
+	};
+	tokens: {
+		accessToken: string;
+		refreshToken: string;
+		expiresIn: number;
+	};
+}
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Invalid email format',
-          },
-        },
-        { status: 400 }
-      );
-    }
+/**
+ * Error response interface
+ */
+interface ErrorResponse {
+	success: false;
+	error: {
+		code: string;
+		message: string;
+	};
+}
 
-    // Validate password strength
-    const passwordValidation = validatePasswordStrength(password);
-    if (!passwordValidation.isValid) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: passwordValidation.error,
-          },
-        },
-        { status: 400 }
-      );
-    }
+/**
+ * Success response interface
+ */
+interface SuccessResponse {
+	success: true;
+	data: RegisterResponseData;
+}
 
-    // Check if user already exists
-    const existingUser = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email.toLowerCase()))
-      .limit(1);
+/**
+ * POST handler for user registration
+ * @param request - Next.js request object
+ * @returns JSON response with user data and tokens or error
+ */
+export async function POST(
+	request: NextRequest,
+): Promise<NextResponse<SuccessResponse | ErrorResponse>> {
+	try {
+		const body = (await request.json()) as RegisterRequestBody;
+		const { email, password, fullName } = body;
 
-    if (existingUser.length > 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'ALREADY_EXISTS',
-            message: 'User with this email already exists',
-          },
-        },
-        { status: 409 }
-      );
-    }
+		// Validate required fields
+		if (!email || !password) {
+			console.error('Registration validation error: Missing email or password');
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'VALIDATION_ERROR',
+						message: 'Email and password are required',
+					},
+				},
+				{ status: 400 },
+			);
+		}
 
-    // Hash password
-    const passwordHash = await hashPassword(password);
+		// Validate email format
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			console.error('Registration validation error: Invalid email format:', email);
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'VALIDATION_ERROR',
+						message: 'Invalid email format',
+					},
+				},
+				{ status: 400 },
+			);
+		}
 
-    // Create user
-    const newUser = await db
-      .insert(users)
-      .values({
-        email: email.toLowerCase(),
-        passwordHash,
-        fullName: fullName || null,
-        role: 'user',
-        emailVerified: false,
-        isActive: true,
-      })
-      .returning();
+		// Validate password strength
+		const passwordValidation = validatePasswordStrength(password);
+		if (!passwordValidation.isValid) {
+			console.error('Registration validation error: Weak password');
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'VALIDATION_ERROR',
+						message: passwordValidation.error || 'Password does not meet strength requirements',
+					},
+				},
+				{ status: 400 },
+			);
+		}
 
-    const user = newUser[0];
+		// Check if user already exists
+		const existingUser = await db
+			.select()
+			.from(users)
+			.where(eq(users.email, email.toLowerCase()))
+			.limit(1);
 
-    // Generate tokens
-    const tokens = generateTokens({
-      userId: user.id,
-      email: user.email,
-      role: user.role as 'user' | 'expert' | 'admin',
-    });
+		if (existingUser.length > 0) {
+			console.error('Registration error: User already exists with email:', email);
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'ALREADY_EXISTS',
+						message: 'User with this email already exists',
+					},
+				},
+				{ status: 409 },
+			);
+		}
 
-    // Set cookies
-    const response = NextResponse.json(
-      {
-        success: true,
-        data: {
-          user: {
-            id: user.id,
-            email: user.email,
-            fullName: user.fullName,
-            role: user.role,
-            emailVerified: user.emailVerified,
-          },
-          tokens,
-        },
-      },
-      { status: 201 }
-    );
+		// Hash password
+		const passwordHash = await hashPassword(password);
 
-    // Set HTTP-only cookies
-    response.cookies.set('access_token', tokens.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: tokens.expiresIn,
-      path: '/',
-    });
+		// Create user
+		const newUser = await db
+			.insert(users)
+			.values({
+				email: email.toLowerCase(),
+				passwordHash,
+				fullName: fullName || null,
+				role: 'user',
+				emailVerified: false,
+				isActive: true,
+			})
+			.returning();
 
-    response.cookies.set('refresh_token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-      path: '/',
-    });
+		const user = newUser[0];
 
-    return response;
-  } catch (error) {
-    console.error('Registration error:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'An error occurred during registration',
-        },
-      },
-      { status: 500 }
-    );
-  }
+		if (!user) {
+			console.error('Registration error: Failed to create user');
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'INTERNAL_ERROR',
+						message: 'Failed to create user account',
+					},
+				},
+				{ status: 500 },
+			);
+		}
+
+		// Generate tokens
+		const tokens = generateTokens({
+			userId: user.id,
+			email: user.email,
+			role: user.role as 'user' | 'expert' | 'admin',
+		});
+
+		// Set cookies
+		const cookieStore = await cookies();
+		cookieStore.set('access_token', tokens.accessToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'lax',
+			maxAge: tokens.expiresIn,
+			path: '/',
+		});
+
+		cookieStore.set('refresh_token', tokens.refreshToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'lax',
+			maxAge: 7 * 24 * 60 * 60, // 7 days
+			path: '/',
+		});
+
+		return NextResponse.json(
+			{
+				success: true,
+				data: {
+					user: {
+						id: user.id,
+						email: user.email,
+						fullName: user.fullName,
+						role: user.role,
+						emailVerified: user.emailVerified,
+					},
+					tokens,
+				},
+			},
+			{ status: 201 },
+		);
+	} catch (error) {
+		console.error('Registration error:', error);
+		return NextResponse.json(
+			{
+				success: false,
+				error: {
+					code: 'INTERNAL_ERROR',
+					message: 'An error occurred during registration',
+				},
+			},
+			{ status: 500 },
+		);
+	}
 }

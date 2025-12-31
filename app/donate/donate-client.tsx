@@ -1,15 +1,15 @@
 'use client';
 
+import { ArrowLeft, Check, Loader2, Lock } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Check, Loader2, Lock } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'sonner';
 
 export default function DonateClient() {
 	const router = useRouter();
@@ -30,7 +30,7 @@ export default function DonateClient() {
 			setTimeout(() => {
 				router.push('/landing');
 			}, 1500);
-		} catch (error) {
+		} catch (_error) {
 			toast.error('Something went wrong. Please try again.');
 		} finally {
 			setIsLoading(false);

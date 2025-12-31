@@ -10,9 +10,9 @@
  * Usage: node scripts/update-iucn-data.js
  */
 
-const { execSync } = require('child_process');
-const path = require('path');
-const fs = require('fs');
+const { execSync } = require('node:child_process');
+const path = require('node:path');
+const fs = require('node:fs');
 
 // Create necessary directories
 const DATA_DIR = path.join(process.cwd(), 'data');

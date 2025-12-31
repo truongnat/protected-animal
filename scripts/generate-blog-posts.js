@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Create the content/blog directory if it doesn't exist
 const blogDir = path.join(process.cwd(), 'content', 'blog');

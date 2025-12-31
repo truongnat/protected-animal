@@ -1,5 +1,7 @@
 'use client';
 
+import type { MDXComponents } from 'mdx/types';
+import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Callout } from '@/components/ui/callout';
 import ImageWithFallback from '@/components/ui/image-with-fallback';
@@ -9,8 +11,6 @@ import {
 	TabsTrigger as TabsTriggerUI,
 	Tabs as TabsUI,
 } from '@/components/ui/tabs';
-import type { MDXComponents } from 'mdx/types';
-import Link from 'next/link';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any

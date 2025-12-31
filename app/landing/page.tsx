@@ -1,10 +1,10 @@
+import Link from 'next/link';
 import SpeciesCharts from '@/components/charts/SpeciesCharts';
 import ConservationImpact from '@/components/features/ConservationImpact';
 import ReportingWidget from '@/components/features/ReportingWidget';
 import SpeciesCard from '@/components/ui/SpeciesCard';
 import VietnamHeroSection from '@/components/ui/VietnamHeroSection';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
-import Link from 'next/link';
 
 export default async function Home() {
 	const getFeaturedSpeciesUseCase = SpeciesFactory.createGetFeaturedSpeciesUseCase();
@@ -23,14 +23,19 @@ export default async function Home() {
 					<div className="text-center mb-12">
 						<div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/30 rounded-full px-4 py-2 mb-4">
 							<span className="text-2xl">🇻🇳</span>
-							<span className="text-sm font-medium text-green-800 dark:text-green-200">Vietnam Wildlife Conservation</span>
+							<span className="text-sm font-medium text-green-800 dark:text-green-200">
+								Vietnam Wildlife Conservation
+							</span>
 						</div>
-						<h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Our Conservation Mission</h2>
+						<h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+							Our Conservation Mission
+						</h2>
 						<p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-							Protecting Vietnam's rich biodiversity through education, enforcement, and community engagement
+							Protecting Vietnam's rich biodiversity through education, enforcement, and community
+							engagement
 						</p>
 					</div>
-					
+
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 						{/* Main Mission Cards */}
 						<div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -38,32 +43,37 @@ export default async function Home() {
 								<div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									🛡️
 								</div>
-								<h3 className="text-xl font-bold mb-3 text-center dark:text-gray-100">Protect Wildlife, Preserve Our Future</h3>
+								<h3 className="text-xl font-bold mb-3 text-center dark:text-gray-100">
+									Protect Wildlife, Preserve Our Future
+								</h3>
 								<p className="text-gray-600 dark:text-gray-300 text-center leading-relaxed">
-									Every action we take today shapes the world we leave for tomorrow. Vietnam's wildlife needs our protection now.
+									Every action we take today shapes the world we leave for tomorrow. Vietnam's
+									wildlife needs our protection now.
 								</p>
 							</div>
-							
+
 							<div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-green-100 dark:border-green-800 hover:shadow-xl transition-shadow">
 								<div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									🌿
 								</div>
 								<h3 className="text-xl font-bold mb-3 text-center">Every Species Matters</h3>
 								<p className="text-gray-600 text-center leading-relaxed">
-									Biodiversity is the key to a healthy and resilient ecosystem. Each species plays a vital role.
+									Biodiversity is the key to a healthy and resilient ecosystem. Each species plays a
+									vital role.
 								</p>
 							</div>
-							
+
 							<div className="bg-white p-8 rounded-2xl shadow-lg border border-green-100 hover:shadow-xl transition-shadow">
 								<div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									📢
 								</div>
 								<h3 className="text-xl font-bold mb-3 text-center">Be a Voice for the Voiceless</h3>
 								<p className="text-gray-600 text-center leading-relaxed">
-									Stand up for those who cannot speak for themselves. Your voice can make a difference.
+									Stand up for those who cannot speak for themselves. Your voice can make a
+									difference.
 								</p>
 							</div>
-							
+
 							<div className="bg-white p-8 rounded-2xl shadow-lg border border-green-100 hover:shadow-xl transition-shadow">
 								<div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
 									⏰
@@ -74,7 +84,7 @@ export default async function Home() {
 								</p>
 							</div>
 						</div>
-						
+
 						{/* Reporting Widget */}
 						<div className="lg:col-span-1">
 							<ReportingWidget language="en" />
@@ -91,22 +101,25 @@ export default async function Home() {
 							<span className="text-xl">🚨</span>
 							<span className="text-sm font-medium text-red-800">Critically Endangered</span>
 						</div>
-						<h2 className="text-4xl font-bold text-gray-900 mb-4">Vietnam's Most Endangered Species</h2>
+						<h2 className="text-4xl font-bold text-gray-900 mb-4">
+							Vietnam's Most Endangered Species
+						</h2>
 						<p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-							These critically endangered animals face imminent extinction without immediate conservation action
+							These critically endangered animals face imminent extinction without immediate
+							conservation action
 						</p>
 					</div>
-					
+
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 						{species && species.length > 0 ? (
 							species.map((animal) => (
-								<SpeciesCard 
-									key={animal.id} 
+								<SpeciesCard
+									key={animal.id}
 									species={{
 										...animal,
 										threats: ['Habitat Loss', 'Poaching', 'Climate Change'], // Mock data
 										population: Math.floor(Math.random() * 1000) + 50, // Mock data
-									}} 
+									}}
 									language="en"
 									showActions={true}
 								/>
@@ -118,7 +131,7 @@ export default async function Home() {
 							</div>
 						)}
 					</div>
-					
+
 					<div className="mt-16 text-center">
 						<Link
 							href="/species"
@@ -161,22 +174,24 @@ export default async function Home() {
 					<div className="absolute bottom-20 left-32 text-5xl">🐘</div>
 					<div className="absolute bottom-32 right-10 text-3xl">🦎</div>
 				</div>
-				
+
 				<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 					<div className="mb-8">
 						<div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
 							<span className="text-2xl">🇻🇳</span>
 							<span className="font-medium">Vietnam Wildlife Conservation</span>
 						</div>
-						<h2 className="text-4xl md:text-5xl font-bold mb-6">
-							Join Our Conservation Efforts
-						</h2>
+						<h2 className="text-4xl md:text-5xl font-bold mb-6">Join Our Conservation Efforts</h2>
 						<p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed">
-							"<span className="text-yellow-300 font-semibold">Extinction is Forever.</span> 
-							<span className="text-green-200"> Conservation Today for Tomorrow's Generations.</span>"
+							"<span className="text-yellow-300 font-semibold">Extinction is Forever.</span>
+							<span className="text-green-200">
+								{' '}
+								Conservation Today for Tomorrow's Generations.
+							</span>
+							"
 						</p>
 					</div>
-					
+
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
 						<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
 							<div className="text-4xl mb-4">💚</div>
@@ -189,7 +204,7 @@ export default async function Home() {
 								Donate Now
 							</Link>
 						</div>
-						
+
 						<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
 							<div className="text-4xl mb-4">🚨</div>
 							<h3 className="text-xl font-bold mb-2">Report Wildlife Crime</h3>
@@ -201,7 +216,7 @@ export default async function Home() {
 								Report Now
 							</Link>
 						</div>
-						
+
 						<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
 							<div className="text-4xl mb-4">🤝</div>
 							<h3 className="text-xl font-bold mb-2">Volunteer</h3>
@@ -214,7 +229,7 @@ export default async function Home() {
 							</Link>
 						</div>
 					</div>
-					
+
 					<div className="flex flex-wrap justify-center gap-4">
 						<Link
 							href="/newsletter"

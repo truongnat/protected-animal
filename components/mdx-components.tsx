@@ -1,10 +1,10 @@
 'use client';
 
-import ImageWithFallback from '@/components/ui/ImageWithFallback';
+import type React from 'react';
 import { Alert } from '@/components/ui/alert';
 import { Callout } from '@/components/ui/callout';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type React from 'react';
 
 interface MDXComponentProps {
 	children?: React.ReactNode;

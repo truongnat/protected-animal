@@ -6,8 +6,8 @@
  * Usage: node scripts/update-homepage-data.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Input file paths
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -75,8 +75,8 @@ function generateHomepageData(summaryStats, featuredSpecies) {
 	// Calculate total threatened species
 	const totalThreatened =
 		(summaryStats.threatCategories['Critically Endangered'] || 0) +
-		(summaryStats.threatCategories['Endangered'] || 0) +
-		(summaryStats.threatCategories['Vulnerable'] || 0);
+		(summaryStats.threatCategories.Endangered || 0) +
+		(summaryStats.threatCategories.Vulnerable || 0);
 
 	// Calculate percentage of threatened species
 	const percentageThreatened = Math.round(
@@ -101,8 +101,8 @@ function generateHomepageData(summaryStats, featuredSpecies) {
 			totalThreatened: totalThreatened,
 			percentageThreatened: percentageThreatened,
 			criticallyEndangered: summaryStats.threatCategories['Critically Endangered'] || 0,
-			endangered: summaryStats.threatCategories['Endangered'] || 0,
-			vulnerable: summaryStats.threatCategories['Vulnerable'] || 0,
+			endangered: summaryStats.threatCategories.Endangered || 0,
+			vulnerable: summaryStats.threatCategories.Vulnerable || 0,
 		},
 		featuredSpecies: homepageFeaturedSpecies,
 		lastUpdated: new Date().toISOString(),

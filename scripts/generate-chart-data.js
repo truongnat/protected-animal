@@ -7,8 +7,8 @@
  * Usage: node scripts/generate-chart-data.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Input file paths
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -192,21 +192,21 @@ function generateEndangeredByRegionChart(endangeredSpecies) {
 			name.includes('kenya') ||
 			name.includes('congo')
 		) {
-			regionData['Africa']++;
+			regionData.Africa++;
 		} else if (
 			name.includes('asia') ||
 			name.includes('china') ||
 			name.includes('india') ||
 			name.includes('japan')
 		) {
-			regionData['Asia']++;
+			regionData.Asia++;
 		} else if (
 			name.includes('europ') ||
 			name.includes('france') ||
 			name.includes('german') ||
 			name.includes('spain')
 		) {
-			regionData['Europe']++;
+			regionData.Europe++;
 		} else if (
 			name.includes('america') ||
 			name.includes('canada') ||
@@ -222,19 +222,19 @@ function generateEndangeredByRegionChart(endangeredSpecies) {
 		) {
 			regionData['South America']++;
 		} else if (name.includes('australia') || name.includes('zealand') || name.includes('pacific')) {
-			regionData['Oceania']++;
+			regionData.Oceania++;
 		} else if (name.includes('antarc') || name.includes('polar')) {
-			regionData['Antarctica']++;
+			regionData.Antarctica++;
 		} else {
 			// Distribute remaining species based on known biodiversity hotspots
 			const rand = Math.random();
-			if (rand < 0.25) regionData['Asia']++;
+			if (rand < 0.25) regionData.Asia++;
 			else if (rand < 0.5) regionData['South America']++;
-			else if (rand < 0.7) regionData['Africa']++;
-			else if (rand < 0.85) regionData['Oceania']++;
+			else if (rand < 0.7) regionData.Africa++;
+			else if (rand < 0.85) regionData.Oceania++;
 			else if (rand < 0.95) regionData['North America']++;
-			else if (rand < 0.99) regionData['Europe']++;
-			else regionData['Antarctica']++;
+			else if (rand < 0.99) regionData.Europe++;
+			else regionData.Antarctica++;
 		}
 	});
 
@@ -280,7 +280,7 @@ function generateThreatTypesChart(endangeredSpecies) {
 
 	// Count species by threat category
 	// In a real application, you would extract this from the actual data
-	endangeredSpecies.forEach((species) => {
+	endangeredSpecies.forEach((_species) => {
 		// Simulate threat distribution based on general knowledge
 		// This is just a placeholder - in reality, you would use actual threat data
 
@@ -289,11 +289,11 @@ function generateThreatTypesChart(endangeredSpecies) {
 
 		// Other threats with varying probabilities
 		threatTypes['Climate Change'] += Math.random() < 0.4 ? 1 : 0;
-		threatTypes['Pollution'] += Math.random() < 0.35 ? 1 : 0;
-		threatTypes['Overexploitation'] += Math.random() < 0.45 ? 1 : 0;
+		threatTypes.Pollution += Math.random() < 0.35 ? 1 : 0;
+		threatTypes.Overexploitation += Math.random() < 0.45 ? 1 : 0;
 		threatTypes['Invasive Species'] += Math.random() < 0.25 ? 1 : 0;
-		threatTypes['Disease'] += Math.random() < 0.15 ? 1 : 0;
-		threatTypes['Other'] += Math.random() < 0.1 ? 1 : 0;
+		threatTypes.Disease += Math.random() < 0.15 ? 1 : 0;
+		threatTypes.Other += Math.random() < 0.1 ? 1 : 0;
 	});
 
 	const chartData = {

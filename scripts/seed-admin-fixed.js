@@ -134,7 +134,7 @@ async function seedAdminUser() {
 				);
 				authUser = signInData.user;
 			}
-		} catch (signInError) {
+		} catch (_signInError) {
 			// Ignore sign-in errors, we'll create the user if needed
 			console.log('User does not exist or password is incorrect. Will create new user.');
 		}

@@ -17,51 +17,51 @@ export class SpeciesFactory {
 	 * Get the species repository instance (singleton)
 	 */
 	static getRepository(): SpeciesRepository {
-		if (!this.repository) {
-			this.repository = new SQLiteSpeciesRepository();
+		if (!SpeciesFactory.repository) {
+			SpeciesFactory.repository = new SQLiteSpeciesRepository();
 		}
-		return this.repository;
+		return SpeciesFactory.repository;
 	}
 
 	/**
 	 * Create a GetFeaturedSpeciesUseCase instance
 	 */
 	static createGetFeaturedSpeciesUseCase(): GetFeaturedSpeciesUseCase {
-		return new GetFeaturedSpeciesUseCase(this.getRepository());
+		return new GetFeaturedSpeciesUseCase(SpeciesFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetAllSpeciesUseCase instance
 	 */
 	static createGetAllSpeciesUseCase(): GetAllSpeciesUseCase {
-		return new GetAllSpeciesUseCase(this.getRepository());
+		return new GetAllSpeciesUseCase(SpeciesFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetSpeciesWithFiltersUseCase instance
 	 */
 	static createGetSpeciesWithFiltersUseCase(): GetSpeciesWithFiltersUseCase {
-		return new GetSpeciesWithFiltersUseCase(this.getRepository());
+		return new GetSpeciesWithFiltersUseCase(SpeciesFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetFilterOptionsUseCase instance
 	 */
 	static createGetFilterOptionsUseCase(): GetFilterOptionsUseCase {
-		return new GetFilterOptionsUseCase(this.getRepository());
+		return new GetFilterOptionsUseCase(SpeciesFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetSpeciesByIdUseCase instance
 	 */
 	static createGetSpeciesByIdUseCase(): GetSpeciesByIdUseCase {
-		return new GetSpeciesByIdUseCase(this.getRepository());
+		return new GetSpeciesByIdUseCase(SpeciesFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetRelatedSpeciesUseCase instance
 	 */
 	static createGetRelatedSpeciesUseCase(): GetRelatedSpeciesUseCase {
-		return new GetRelatedSpeciesUseCase(this.getRepository());
+		return new GetRelatedSpeciesUseCase(SpeciesFactory.getRepository());
 	}
 }

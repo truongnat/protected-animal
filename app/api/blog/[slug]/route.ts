@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import matter from 'gray-matter';
 import { type NextRequest, NextResponse } from 'next/server';
 import { remark } from 'remark';
@@ -9,7 +9,10 @@ import html from 'remark-html';
 const contentDirectory = path.join(process.cwd(), 'content', 'blog');
 
 // GET /api/blog/[slug] - Get a specific blog post by slug
-export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(
+	_request: NextRequest,
+	{ params }: { params: Promise<{ slug: string }> },
+) {
 	try {
 		const { slug } = await params;
 

@@ -1,28 +1,62 @@
 'use client';
 
-import type { Species } from '@/lib/core/domain/entities/species';
 import {
 	CategoryScale,
 	type ChartData,
 	Chart as ChartJS,
 	type ChartOptions,
 	Legend,
-	LineElement,
 	LinearScale,
+	LineElement,
 	PointElement,
 	Title,
 	Tooltip,
 } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import type { Species } from '@/lib/core/domain/entities/species';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+/**
+ * Props for the PopulationChart component
+ */
 interface PopulationChartProps {
+	/** Array of species to display in the chart */
 	species: Species[];
 }
 
+/**
+ * Gets the color for a conservation status
+ *
+ * @param status - The conservation status string
+ * @returns RGBA color string for the status
+ */
+function getStatusColor(status: string): string {
+	if (status.includes('Critically')) return 'rgba(220, 53, 69, 0.8)'; // Red
+	if (status.includes('Endangered')) return 'rgba(255, 128, 0, 0.8)'; // Orange
+	if (status.includes('Vulnerable')) return 'rgba(255, 193, 7, 0.8)'; // Yellow
+	return 'rgba(40, 167, 69, 0.8)'; // Green for others
+}
+
+/**
+ * PopulationChart Component
+ *
+ * Displays a line chart showing the 10 species with the lowest populations.
+ * This helps visualize which species are most critically endangered based on
+ * remaining population counts.
+ *
+ * @param props - Component props
+ * @returns A line chart visualization of species populations
+ *
+ * @example
+ * ```tsx
+ * <PopulationChart species={speciesArray} />
+ * ```
+ */
 export default function PopulationChart({ species }: PopulationChartProps) {
+	const { t } = useTranslation();
 	const [chartData, setChartData] = useState<ChartData<'line'>>({
 		labels: [],
 		datasets: [],
@@ -38,14 +72,6 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 		const labels = speciesWithPopulation.map((animal) => animal.name);
 		const data = speciesWithPopulation.map((animal) => animal.population || 0);
 
-		// Define colors based on conservation status
-		const getStatusColor = (status: string) => {
-			if (status.includes('Critically')) return 'rgba(220, 53, 69, 0.8)'; // Red
-			if (status.includes('Endangered')) return 'rgba(255, 128, 0, 0.8)'; // Orange
-			if (status.includes('Vulnerable')) return 'rgba(255, 193, 7, 0.8)'; // Yellow
-			return 'rgba(40, 167, 69, 0.8)'; // Green for others
-		};
-
 		const backgroundColor = speciesWithPopulation.map((animal) =>
 			getStatusColor(animal.conservation_status),
 		);
@@ -54,7 +80,7 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 			labels,
 			datasets: [
 				{
-					label: 'Population',
+					label: t('charts.population.label'),
 					data,
 					backgroundColor,
 					borderColor: 'rgba(75, 192, 192, 1)',
@@ -63,7 +89,7 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 				},
 			],
 		});
-	}, [species]);
+	}, [species, t]);
 
 	const options: ChartOptions<'line'> = {
 		responsive: true,
@@ -74,13 +100,13 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 			},
 			title: {
 				display: false,
-				text: 'Species Population',
+				text: t('charts.population.title'),
 			},
 			tooltip: {
 				callbacks: {
 					label: (context) => {
 						const value = context.raw as number;
-						return `Population: ${value.toLocaleString()}`;
+						return `${t('charts.population.label')}: ${value.toLocaleString()}`;
 					},
 				},
 			},
@@ -90,7 +116,7 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 				beginAtZero: true,
 				title: {
 					display: true,
-					text: 'Population',
+					text: t('charts.population.label'),
 				},
 				ticks: {
 					callback: (value) => Number(value).toLocaleString(),
@@ -99,7 +125,7 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 			x: {
 				title: {
 					display: true,
-					text: 'Species',
+					text: t('species.featured'),
 				},
 				ticks: {
 					maxRotation: 45,
@@ -110,15 +136,15 @@ export default function PopulationChart({ species }: PopulationChartProps) {
 	};
 
 	return (
-		<div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-			<h3 className="text-xl font-semibold mb-4 text-center">Species with Lowest Populations</h3>
+		<div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+			<h3 className="text-xl font-semibold mb-4 text-center text-gray-900 dark:text-gray-100">
+				{t('charts.population.title')}
+			</h3>
 			<div className="h-64">
 				<Line data={chartData} options={options} />
 			</div>
-			<div className="mt-4 text-sm text-gray-600">
-				<p className="text-center">
-					Remaining population counts of the most critically endangered species
-				</p>
+			<div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+				<p className="text-center">{t('charts.population.description')}</p>
 			</div>
 		</div>
 	);

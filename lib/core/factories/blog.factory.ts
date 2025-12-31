@@ -13,23 +13,23 @@ export class BlogFactory {
 	 * Get the blog repository instance (singleton)
 	 */
 	static getRepository(): BlogRepository {
-		if (!this.repository) {
-			this.repository = new MarkdownBlogRepository();
+		if (!BlogFactory.repository) {
+			BlogFactory.repository = new MarkdownBlogRepository();
 		}
-		return this.repository;
+		return BlogFactory.repository;
 	}
 
 	/**
 	 * Create a GetBlogPostUseCase instance
 	 */
 	static createGetBlogPostUseCase(): GetBlogPostUseCase {
-		return new GetBlogPostUseCase(this.getRepository());
+		return new GetBlogPostUseCase(BlogFactory.getRepository());
 	}
 
 	/**
 	 * Create a GetAllBlogPostsUseCase instance
 	 */
 	static createGetAllBlogPostsUseCase(): GetAllBlogPostsUseCase {
-		return new GetAllBlogPostsUseCase(this.getRepository());
+		return new GetAllBlogPostsUseCase(BlogFactory.getRepository());
 	}
 }

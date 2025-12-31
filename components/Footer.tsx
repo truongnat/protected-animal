@@ -1,96 +1,157 @@
 'use client';
 
-import { useTranslation } from '@/lib/i18n/useTranslation';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 
-export default function Footer() {
+/**
+ * Props for the FooterSection component
+ */
+interface FooterSectionProps {
+	title: string;
+	children: React.ReactNode;
+}
+
+/**
+ * Props for the FooterLink component
+ */
+interface FooterLinkProps {
+	href: string;
+	children: React.ReactNode;
+	external?: boolean;
+}
+
+/**
+ * Footer section component for organizing footer content
+ * @param {FooterSectionProps} props - Component props
+ * @returns {React.JSX.Element} Footer section
+ */
+function FooterSection({ title, children }: FooterSectionProps): React.JSX.Element {
+	return (
+		<div>
+			<h3 className="text-lg font-semibold mb-4">{title}</h3>
+			{children}
+		</div>
+	);
+}
+
+/**
+ * Footer link component with consistent styling
+ * @param {FooterLinkProps} props - Component props
+ * @returns {React.JSX.Element} Footer link
+ */
+function FooterLink({ href, children, external = false }: FooterLinkProps): React.JSX.Element {
+	const linkProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+
+	return (
+		<Link
+			href={href}
+			className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+			{...linkProps}
+		>
+			{children}
+		</Link>
+	);
+}
+
+/**
+ * Social media icon component
+ * @param {Object} props - Component props
+ * @param {string} props.name - Social media platform name
+ * @param {string} props.href - Link URL
+ * @param {React.ReactNode} props.children - SVG icon
+ * @returns {React.JSX.Element} Social media icon link
+ */
+function SocialIcon({
+	name,
+	href,
+	children,
+}: {
+	name: string;
+	href: string;
+	children: React.ReactNode;
+}): React.JSX.Element {
+	return (
+		<a
+			href={href}
+			className="text-muted-foreground hover:text-foreground transition-colors"
+			aria-label={name}
+		>
+			<span className="sr-only">{name}</span>
+			{children}
+		</a>
+	);
+}
+
+/**
+ * Main footer component for the application
+ *
+ * Displays site information, navigation links, external resources, and social media links.
+ * Uses translation hook for internationalization support.
+ *
+ * @returns {React.JSX.Element} Footer component
+ *
+ * @example
+ * ```tsx
+ * <Footer />
+ * ```
+ */
+export default function Footer(): React.JSX.Element {
 	const { t } = useTranslation();
 
 	return (
-		<footer className="border-t bg-background">
+		<footer className="border-t bg-background" role="contentinfo">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-					<div>
-						<h3 className="text-lg font-semibold mb-4">Vietnam Wildlife Conservation</h3>
-						<p className="text-sm text-muted-foreground">
-							{t('footer.description')}
-						</p>
-					</div>
-					<div>
-						<h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
+					<FooterSection title="Vietnam Wildlife Conservation">
+						<p className="text-sm text-muted-foreground">{t('footer.description')}</p>
+					</FooterSection>
+
+					<FooterSection title={t('footer.quickLinks')}>
 						<ul className="space-y-2">
 							<li>
-								<Link href="/landing" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.home')}
-								</Link>
+								<FooterLink href="/landing">{t('nav.home')}</FooterLink>
 							</li>
 							<li>
-								<Link href="/species" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.species')}
-								</Link>
+								<FooterLink href="/species">{t('nav.species')}</FooterLink>
 							</li>
 							<li>
-								<Link href="/report" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.report')}
-								</Link>
+								<FooterLink href="/report">{t('nav.report')}</FooterLink>
 							</li>
 							<li>
-								<Link href="/donate" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.donate')}
-								</Link>
+								<FooterLink href="/donate">{t('nav.donate')}</FooterLink>
 							</li>
 							<li>
-								<Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.blog')}
-								</Link>
+								<FooterLink href="/blog">{t('nav.blog')}</FooterLink>
 							</li>
 							<li>
-								<Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
-									{t('nav.about')}
-								</Link>
+								<FooterLink href="/about">{t('nav.about')}</FooterLink>
 							</li>
 						</ul>
-					</div>
-					<div>
-						<h3 className="text-lg font-semibold mb-4">Resources</h3>
+					</FooterSection>
+
+					<FooterSection title="Resources">
 						<ul className="space-y-2">
 							<li>
-								<a
-									href="https://www.worldwildlife.org/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-sm text-muted-foreground hover:text-foreground"
-								>
+								<FooterLink href="https://www.worldwildlife.org/" external>
 									World Wildlife Fund
-								</a>
+								</FooterLink>
 							</li>
 							<li>
-								<a
-									href="https://www.iucn.org/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-sm text-muted-foreground hover:text-foreground"
-								>
+								<FooterLink href="https://www.iucn.org/" external>
 									IUCN Red List
-								</a>
+								</FooterLink>
 							</li>
 							<li>
-								<a
-									href="https://env4wildlife.org/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-sm text-muted-foreground hover:text-foreground"
-								>
+								<FooterLink href="https://env4wildlife.org/" external>
 									Education For Nature - Vietnam
-								</a>
+								</FooterLink>
 							</li>
 						</ul>
-					</div>
-					<div>
-						<h3 className="text-lg font-semibold mb-4">{t('footer.contact')}</h3>
-						<div className="flex space-x-4">
-							<a href="#" className="text-muted-foreground hover:text-foreground">
-								<span className="sr-only">Facebook</span>
+					</FooterSection>
+
+					<FooterSection title={t('footer.contact')}>
+						<div className="flex space-x-4" role="list" aria-label="Social media links">
+							<SocialIcon name="Facebook" href="#">
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path
 										fillRule="evenodd"
@@ -98,9 +159,8 @@ export default function Footer() {
 										clipRule="evenodd"
 									/>
 								</svg>
-							</a>
-							<a href="#" className="text-muted-foreground hover:text-foreground">
-								<span className="sr-only">Instagram</span>
+							</SocialIcon>
+							<SocialIcon name="Instagram" href="#">
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path
 										fillRule="evenodd"
@@ -108,27 +168,21 @@ export default function Footer() {
 										clipRule="evenodd"
 									/>
 								</svg>
-							</a>
-							<a href="#" className="text-muted-foreground hover:text-foreground">
-								<span className="sr-only">Twitter</span>
+							</SocialIcon>
+							<SocialIcon name="Twitter" href="#">
 								<svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 									<path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
 								</svg>
-							</a>
+							</SocialIcon>
 						</div>
-					</div>
+					</FooterSection>
 				</div>
-				<div className="mt-8 border-t pt-8 flex justify-between">
-					<p className="text-sm text-muted-foreground">
-						{t('footer.copyright')}
-					</p>
+
+				<div className="mt-8 border-t pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+					<p className="text-sm text-muted-foreground">{t('footer.copyright')}</p>
 					<div className="flex space-x-6">
-						<Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
-							{t('footer.privacy')}
-						</Link>
-						<Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
-							{t('footer.terms')}
-						</Link>
+						<FooterLink href="/privacy">{t('footer.privacy')}</FooterLink>
+						<FooterLink href="/terms">{t('footer.terms')}</FooterLink>
 					</div>
 				</div>
 			</div>

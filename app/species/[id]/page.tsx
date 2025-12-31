@@ -1,9 +1,9 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import type { Species } from '@/lib/core/domain/entities/species';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { getImageUrl } from '@/lib/utils';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 /**
  * Fetches a specific species by ID
@@ -38,6 +38,7 @@ async function getRelatedSpecies(species: Species, limit = 3): Promise<Species[]
 }
 
 export default async function SpeciesDetailPage({ params }: { params: Promise<{ id: string }> }) {
+	// Next.js 16: params must be awaited
 	const { id } = await params;
 	const species = await getSpeciesById(id);
 
@@ -184,11 +185,7 @@ export default async function SpeciesDetailPage({ params }: { params: Promise<{ 
 								<h3 className="text-xl font-semibold mb-6">Related Species</h3>
 								<div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 									{relatedSpecies.map((related) => (
-										<Link
-											key={related.id}
-											href={`/species/${related.id}`}
-											className="group"
-										>
+										<Link key={related.id} href={`/species/${related.id}`} className="group">
 											<div className="bg-white rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
 												<div className="h-40 relative">
 													<ImageWithFallback

@@ -1,158 +1,344 @@
 'use client';
 
-import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import { useTranslation } from '@/lib/i18n/useTranslation';
-import type { Species } from '@/lib/core/domain/entities/species';
 import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
+import type { Species } from '@/lib/core/domain/entities/species';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 
+/**
+ * Props for the SpeciesCard component
+ */
 interface SpeciesCardProps {
+	/** The species data to display */
 	species: Species;
+	/** Optional language override (defaults to current translation context) */
 	language?: 'en' | 'vi';
+	/** Whether to show action buttons (report, support) */
 	showActions?: boolean;
+	/** Optional CSS class name for styling */
+	className?: string;
 }
 
-const statusColors = {
-	'Critically Endangered': { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', progress: '95%' },
-	'Endangered': { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-200', progress: '85%' },
-	'Vulnerable': { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-200', progress: '70%' },
-	'Near Threatened': { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', progress: '50%' },
-	'Least Concern': { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', progress: '20%' },
+/**
+ * Props for the SpeciesImage sub-component
+ */
+interface SpeciesImageProps {
+	/** Image URL */
+	imageUrl: string;
+	/** Species name for alt text */
+	name: string;
+	/** Conservation status for badge */
+	conservationStatus: string;
+	/** Region for badge */
+	region: string;
+	/** Translated status text */
+	statusText: string;
+}
+
+/**
+ * Props for the SpeciesInfo sub-component
+ */
+interface SpeciesInfoProps {
+	/** Species name */
+	name: string;
+	/** Scientific name */
+	scientificName: string;
+	/** Description text */
+	description: string;
+	/** Population count */
+	population: number | null;
+	/** List of threats */
+	threats: string[] | undefined;
+	/** Threat level percentage */
+	threatLevel: string;
+	/** Translation function */
+	t: (key: string) => string;
+}
+
+/**
+ * Props for the SpeciesActions sub-component
+ */
+interface SpeciesActionsProps {
+	/** Species ID for navigation */
+	speciesId: number;
+	/** Whether to show action buttons */
+	showActions: boolean;
+	/** Translation function */
+	t: (key: string) => string;
+}
+
+/**
+ * Conservation status configuration with badge variants and threat levels
+ */
+interface StatusConfig {
+	variant: 'destructive' | 'default' | 'secondary' | 'outline';
+	progress: string;
+}
+
+// Conservation status colors - KEEP these as they have semantic meaning
+const statusColors: Record<string, StatusConfig> = {
+	'Critically Endangered': { variant: 'destructive', progress: '95%' },
+	Endangered: { variant: 'default', progress: '85%' },
+	Vulnerable: { variant: 'secondary', progress: '70%' },
+	'Near Threatened': { variant: 'outline', progress: '50%' },
+	'Least Concern': { variant: 'default', progress: '20%' },
 };
 
-export default function SpeciesCard({ species, language, showActions = false }: SpeciesCardProps) {
-	const { t } = useTranslation();
-	const statusStyle = statusColors[species.conservation_status as keyof typeof statusColors] || statusColors['Least Concern'];
-	
-	// Map conservation status to translation keys
-	const getStatusTranslation = (status: string) => {
-		const statusMap: { [key: string]: string } = {
-			'Critically Endangered': 'species.status.criticallyEndangered',
-			'Endangered': 'species.status.endangered',
-			'Vulnerable': 'species.status.vulnerable',
-			'Near Threatened': 'species.status.nearThreatened',
-			'Least Concern': 'species.status.leastConcern',
-		};
-		return t(statusMap[status] || status);
-	};
+/**
+ * Default status configuration for unknown statuses
+ */
+const defaultStatusConfig: StatusConfig = { variant: 'default', progress: '20%' };
+
+/**
+ * Map conservation status to translation keys
+ */
+const statusTranslationMap: Record<string, string> = {
+	'Critically Endangered': 'species.status.criticallyEndangered',
+	Endangered: 'species.status.endangered',
+	Vulnerable: 'species.status.vulnerable',
+	'Near Threatened': 'species.status.nearThreatened',
+	'Least Concern': 'species.status.leastConcern',
+};
+
+/**
+ * SpeciesImage - Displays the species image with status and region badges
+ */
+function SpeciesImage({
+	imageUrl,
+	name,
+	conservationStatus,
+	region,
+	statusText,
+}: SpeciesImageProps) {
+	const statusStyle: StatusConfig = statusColors[conservationStatus] ?? defaultStatusConfig;
 
 	return (
-		<div className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
-			{/* Image Container */}
-			<div className="relative h-48 bg-gradient-to-br from-green-100 to-emerald-100 overflow-hidden">
-				<ImageWithFallback
-					src={species.image_url || ''}
-					alt={species.name}
-					altText={species.name}
-					fill
-					sizes="(max-width: 768px) 100vw, 33vw"
-					className="object-cover group-hover:scale-105 transition-transform duration-300"
-					unoptimized
-				/>
-				
-				{/* Status Badge */}
-				<div className="absolute top-3 right-3">
-					<span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border} border backdrop-blur-sm`}>
-						{getStatusTranslation(species.conservation_status)}
-					</span>
-				</div>
+		<div className="relative h-48 bg-muted dark:bg-muted/50 overflow-hidden">
+			<ImageWithFallback
+				src={imageUrl || ''}
+				alt={`${name} - endangered species`}
+				altText={name}
+				fill
+				sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+				className="object-cover group-hover:scale-105 transition-transform duration-300"
+				unoptimized
+				aria-label={`Image of ${name}`}
+			/>
 
-				{/* Region Badge */}
-				{species.region && (
-					<div className="absolute top-3 left-3">
-						<span className="px-2 py-1 text-xs font-medium bg-white/90 text-gray-700 rounded-full backdrop-blur-sm">
-							📍 {species.region}
-						</span>
-					</div>
-				)}
+			{/* Status Badge */}
+			<div className="absolute top-3 right-3">
+				<Badge
+					variant={statusStyle.variant}
+					className="backdrop-blur-sm dark:backdrop-blur-md"
+					aria-label={`Conservation status: ${statusText}`}
+				>
+					{statusText}
+				</Badge>
 			</div>
 
-			{/* Content */}
-			<div className="p-6">
-				{/* Header */}
-				<div className="mb-3">
-					<h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-green-700 transition-colors">
-						{species.name}
-					</h3>
-					<p className="text-sm text-gray-500 italic">{species.scientific_name}</p>
+			{/* Region Badge */}
+			{region && (
+				<div className="absolute top-3 left-3">
+					<Badge
+						variant="secondary"
+						className="backdrop-blur-sm dark:backdrop-blur-md"
+						aria-label={`Region: ${region}`}
+					>
+						📍 {region}
+					</Badge>
 				</div>
+			)}
+		</div>
+	);
+}
 
+/**
+ * SpeciesInfo - Displays the species information including name, description, population, and threats
+ */
+function SpeciesInfo({
+	name,
+	scientificName,
+	description,
+	population,
+	threats,
+	threatLevel,
+	t,
+}: SpeciesInfoProps) {
+	return (
+		<>
+			<CardHeader>
+				<h3 className="text-xl font-bold mb-1 dark:text-foreground">{name}</h3>
+				<p className="text-sm text-muted-foreground dark:text-muted-foreground italic">
+					{scientificName}
+				</p>
+			</CardHeader>
+
+			<CardContent className="space-y-4">
 				{/* Conservation Progress Bar */}
-				<div className="mb-4">
+				<div>
 					<div className="flex justify-between items-center mb-1">
-						<span className="text-xs font-medium text-gray-600">
-							{language === 'en' ? 'Threat Level' : 'Mức độ đe dọa'}
+						<span className="text-xs font-medium text-muted-foreground dark:text-muted-foreground">
+							{t('species.threatLevel')}
 						</span>
-						<span className="text-xs text-gray-500">{statusStyle.progress}</span>
+						<span className="text-xs text-muted-foreground dark:text-muted-foreground">
+							{threatLevel}
+						</span>
 					</div>
-					<div className="w-full bg-gray-200 rounded-full h-2">
+					<div className="w-full bg-muted dark:bg-muted/50 rounded-full h-2">
 						<div
-							className={`h-2 rounded-full transition-all duration-500 ${
-								species.conservation_status.includes('Critical') ? 'bg-red-500' :
-								species.conservation_status.includes('Endangered') ? 'bg-orange-500' :
-								species.conservation_status.includes('Vulnerable') ? 'bg-yellow-500' :
-								'bg-green-500'
-							}`}
-							style={{ width: statusStyle.progress }}
+							className="bg-primary dark:bg-primary h-2 rounded-full transition-all duration-500"
+							style={{ width: threatLevel }}
+							role="progressbar"
+							aria-valuenow={parseInt(threatLevel, 10)}
+							aria-valuemin={0}
+							aria-valuemax={100}
+							aria-label={`Threat level: ${threatLevel}`}
 						/>
 					</div>
 				</div>
 
 				{/* Population Info */}
-				{species.population && (
-					<div className="mb-3 flex items-center gap-2 text-sm text-gray-600">
-						<span>👥</span>
+				{population && (
+					<div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
+						<span aria-hidden="true">👥</span>
 						<span>
-							{language === 'en' ? 'Population:' : 'Quần thể:'} ~{species.population.toLocaleString()}
+							{t('species.population')}: ~{population.toLocaleString()}
 						</span>
 					</div>
 				)}
 
 				{/* Description */}
-				<p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
-					{species.description}
+				<p className="text-sm text-muted-foreground dark:text-muted-foreground line-clamp-3 leading-relaxed">
+					{description}
 				</p>
 
 				{/* Threats */}
-				{species.threats && species.threats.length > 0 && (
-					<div className="mb-4">
-						<p className="text-xs font-medium text-gray-500 mb-2">
-							{language === 'en' ? 'Main Threats:' : 'Mối đe dọa chính:'}
+				{threats && threats.length > 0 && (
+					<div>
+						<p className="text-xs font-medium text-muted-foreground dark:text-muted-foreground mb-2">
+							{t('species.mainThreats')}:
 						</p>
 						<div className="flex flex-wrap gap-1">
-							{species.threats?.slice(0, 3).map((threat: string, index: number) => (
-								<span
-									key={index}
-									className="px-2 py-1 text-xs bg-red-50 text-red-700 rounded-md border border-red-100"
+							{threats.slice(0, 3).map((threat: string, index: number) => (
+								<Badge
+									key={`threat-${index}`}
+									variant="destructive"
+									className="dark:bg-destructive dark:text-destructive-foreground"
 								>
 									{threat}
-								</span>
+								</Badge>
 							))}
 						</div>
 					</div>
 				)}
+			</CardContent>
+		</>
+	);
+}
 
-				{/* Actions */}
-				<div className="flex items-center justify-between pt-4 border-t border-gray-100">
-					<Link
-						href={`/species/${species.id}`}
-						className="text-green-700 hover:text-green-900 font-medium text-sm flex items-center gap-1 group/link"
+/**
+ * SpeciesActions - Displays action buttons for the species card
+ */
+function SpeciesActions({ speciesId, showActions, t }: SpeciesActionsProps) {
+	return (
+		<CardFooter className="flex items-center justify-between border-t dark:border-border pt-4">
+			<Button
+				variant="link"
+				asChild
+				className="p-0 dark:text-primary"
+				aria-label={`${t('species.actions.learn')} about species`}
+			>
+				<Link href={`/species/${speciesId}`}>{t('species.actions.learn')} →</Link>
+			</Button>
+
+			{showActions && (
+				<div className="flex gap-2" role="group" aria-label="Species actions">
+					<Button
+						variant="ghost"
+						size="icon"
+						type="button"
+						aria-label={t('species.actions.report')}
+						title={t('species.actions.report')}
+						className="dark:hover:bg-accent"
 					>
-						{language === 'en' ? 'Learn more' : 'Tìm hiểu thêm'}
-						<span className="group-hover/link:translate-x-1 transition-transform">→</span>
-					</Link>
-
-					{showActions && (
-						<div className="flex gap-2">
-							<button className="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Report Issue">
-								🚨
-							</button>
-							<button className="p-2 text-gray-400 hover:text-green-500 transition-colors" title="Support">
-								💚
-							</button>
-						</div>
-					)}
+						🚨
+					</Button>
+					<Button
+						variant="ghost"
+						size="icon"
+						type="button"
+						aria-label={t('species.actions.support')}
+						title={t('species.actions.support')}
+						className="dark:hover:bg-accent"
+					>
+						💚
+					</Button>
 				</div>
-			</div>
-		</div>
+			)}
+		</CardFooter>
+	);
+}
+
+/**
+ * SpeciesCard - A card component displaying information about an endangered species
+ *
+ * This component shows species details including image, conservation status, population,
+ * threats, and action buttons. It supports internationalization and dark mode.
+ *
+ * @example
+ * ```tsx
+ * <SpeciesCard
+ *   species={speciesData}
+ *   showActions={true}
+ * />
+ * ```
+ *
+ * @param props - Component props
+ * @returns A card displaying species information
+ */
+export default function SpeciesCard({
+	species,
+	language,
+	showActions = false,
+	className = '',
+}: SpeciesCardProps) {
+	const { t } = useTranslation();
+	const statusStyle: StatusConfig =
+		statusColors[species.conservation_status] ?? defaultStatusConfig;
+
+	// Get translated status text
+	const statusTranslationKey =
+		statusTranslationMap[species.conservation_status] || species.conservation_status;
+	const statusText = t(statusTranslationKey);
+
+	return (
+		<Card
+			className={`group overflow-hidden transition-all duration-300 hover:shadow-lg dark:bg-card dark:border-border ${className}`}
+			role="article"
+			aria-label={`Species card for ${species.name}`}
+		>
+			<SpeciesImage
+				imageUrl={species.image_url}
+				name={species.name}
+				conservationStatus={species.conservation_status}
+				region={species.region}
+				statusText={statusText}
+			/>
+
+			<SpeciesInfo
+				name={species.name}
+				scientificName={species.scientific_name}
+				description={species.description}
+				population={species.population}
+				threats={species.threats}
+				threatLevel={statusStyle.progress}
+				t={t}
+			/>
+
+			<SpeciesActions speciesId={species.id} showActions={showActions} t={t} />
+		</Card>
 	);
 }

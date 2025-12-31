@@ -7,8 +7,8 @@
  * Usage: node scripts/create-placeholder-images.js
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const axios = require('axios');
 
 // Output directory

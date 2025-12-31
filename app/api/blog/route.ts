@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import matter from 'gray-matter';
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 		const { searchParams } = new URL(request.url);
 		const tag = searchParams.get('tag');
 		const limit = searchParams.get('limit')
-			? Number.parseInt(searchParams.get('limit') as string)
+			? Number.parseInt(searchParams.get('limit') as string, 10)
 			: 10;
 
 		// Get all markdown files from the content directory
@@ -54,8 +54,8 @@ export async function GET(request: NextRequest) {
 
 		// Filter by tag if provided
 		if (tag) {
-			posts = posts.filter(
-				(post) => post.tags && post.tags.some((t: string) => t.toLowerCase() === tag.toLowerCase()),
+			posts = posts.filter((post) =>
+				post.tags?.some((t: string) => t.toLowerCase() === tag.toLowerCase()),
 			);
 		}
 

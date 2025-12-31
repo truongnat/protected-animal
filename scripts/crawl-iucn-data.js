@@ -9,8 +9,8 @@
 
 const axios = require('axios');
 const cheerio = require('cheerio');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // URLs to crawl
 const IUCN_BASE_URL = 'https://www.iucnredlist.org';
@@ -69,7 +69,7 @@ async function fetchHtml(url) {
 			}
 
 			// Wait before retrying (exponential backoff)
-			const waitTime = 2000 * Math.pow(2, retries - 1); // 2s, 4s, 8s
+			const waitTime = 2000 * 2 ** (retries - 1); // 2s, 4s, 8s
 			console.log(`Waiting ${waitTime}ms before retrying...`);
 			await new Promise((resolve) => setTimeout(resolve, waitTime));
 		}
@@ -166,7 +166,7 @@ async function extractSummaryStatistics() {
 
 	// Extract total species assessed
 	const totalSpeciesText = $('.statistic-box h1').first().text().trim();
-	summaryStats.totalSpeciesAssessed = Number.parseInt(totalSpeciesText.replace(/,/g, '')) || 0;
+	summaryStats.totalSpeciesAssessed = Number.parseInt(totalSpeciesText.replace(/,/g, ''), 10) || 0;
 	console.log(`Total species assessed: ${summaryStats.totalSpeciesAssessed}`);
 
 	// Extract threat categories data
@@ -178,7 +178,7 @@ async function extractSummaryStatistics() {
 		if (category && count) {
 			// Clean up the category name and count
 			const cleanCategory = category.replace(/\([^)]*\)/g, '').trim();
-			const numericCount = Number.parseInt(count.replace(/,/g, '')) || 0;
+			const numericCount = Number.parseInt(count.replace(/,/g, ''), 10) || 0;
 
 			// Add to threat categories if it's a valid category
 			if (
@@ -214,7 +214,7 @@ async function extractSummaryStatistics() {
 
 						if (group && assessed && group !== 'Total') {
 							summaryStats.taxonomicGroups[group] =
-								Number.parseInt(assessed.replace(/,/g, '')) || 0;
+								Number.parseInt(assessed.replace(/,/g, ''), 10) || 0;
 							console.log(`  ${group}: ${summaryStats.taxonomicGroups[group]}`);
 						}
 					}
@@ -582,13 +582,13 @@ The International Union for Conservation of Nature (IUCN) Red List is the world'
 As of the latest update, the IUCN has assessed **${summaryStats.totalSpeciesAssessed.toLocaleString()}** species worldwide. Of these:
 
 - **${(summaryStats.threatCategories['Critically Endangered'] || 0).toLocaleString()}** are Critically Endangered
-- **${(summaryStats.threatCategories['Endangered'] || 0).toLocaleString()}** are Endangered
-- **${(summaryStats.threatCategories['Vulnerable'] || 0).toLocaleString()}** are Vulnerable
+- **${(summaryStats.threatCategories.Endangered || 0).toLocaleString()}** are Endangered
+- **${(summaryStats.threatCategories.Vulnerable || 0).toLocaleString()}** are Vulnerable
 - **${(summaryStats.threatCategories['Near Threatened'] || 0).toLocaleString()}** are Near Threatened
 - **${(summaryStats.threatCategories['Least Concern'] || 0).toLocaleString()}** are of Least Concern
 - **${(summaryStats.threatCategories['Data Deficient'] || 0).toLocaleString()}** are Data Deficient
 
-This means that approximately **${Math.round((((summaryStats.threatCategories['Critically Endangered'] || 0) + (summaryStats.threatCategories['Endangered'] || 0) + (summaryStats.threatCategories['Vulnerable'] || 0)) / summaryStats.totalSpeciesAssessed) * 100)}%** of all assessed species are threatened with extinction.
+This means that approximately **${Math.round((((summaryStats.threatCategories['Critically Endangered'] || 0) + (summaryStats.threatCategories.Endangered || 0) + (summaryStats.threatCategories.Vulnerable || 0)) / summaryStats.totalSpeciesAssessed) * 100)}%** of all assessed species are threatened with extinction.
 
 ## Featured Endangered Species
 

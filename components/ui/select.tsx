@@ -6,6 +6,45 @@ import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Select component
+ *
+ * A dropdown select component built on Radix UI primitives.
+ * Provides accessible select menus with keyboard navigation and custom styling.
+ *
+ * @example
+ * ```tsx
+ * <Select>
+ *   <SelectTrigger>
+ *     <SelectValue placeholder="Select an option" />
+ *   </SelectTrigger>
+ *   <SelectContent>
+ *     <SelectItem value="option1">Option 1</SelectItem>
+ *     <SelectItem value="option2">Option 2</SelectItem>
+ *     <SelectItem value="option3">Option 3</SelectItem>
+ *   </SelectContent>
+ * </Select>
+ *
+ * // With groups
+ * <Select>
+ *   <SelectTrigger>
+ *     <SelectValue placeholder="Select species" />
+ *   </SelectTrigger>
+ *   <SelectContent>
+ *     <SelectGroup>
+ *       <SelectLabel>Mammals</SelectLabel>
+ *       <SelectItem value="tiger">Tiger</SelectItem>
+ *       <SelectItem value="elephant">Elephant</SelectItem>
+ *     </SelectGroup>
+ *     <SelectSeparator />
+ *     <SelectGroup>
+ *       <SelectLabel>Birds</SelectLabel>
+ *       <SelectItem value="eagle">Eagle</SelectItem>
+ *     </SelectGroup>
+ *   </SelectContent>
+ * </Select>
+ * ```
+ */
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
 	return <SelectPrimitive.Root data-slot="select" {...props} />;
 }

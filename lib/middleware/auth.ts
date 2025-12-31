@@ -3,11 +3,12 @@
  * Verifies JWT tokens and extracts user information
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken, type TokenPayload } from '../auth/jwt';
+import { cookies } from 'next/headers';
+import { type NextRequest, NextResponse } from 'next/server';
+import { type TokenPayload, verifyToken } from '../auth/jwt';
 
 export interface AuthenticatedRequest extends NextRequest {
-  user?: TokenPayload;
+	user?: TokenPayload;
 }
 
 /**
@@ -15,16 +16,17 @@ export interface AuthenticatedRequest extends NextRequest {
  * @param request - Next.js request object
  * @returns JWT token or null
  */
-function extractToken(request: NextRequest): string | null {
-  // Try Authorization header first
-  const authHeader = request.headers.get('authorization');
-  if (authHeader?.startsWith('Bearer ')) {
-    return authHeader.substring(7);
-  }
+async function extractToken(request: NextRequest): Promise<string | null> {
+	// Try Authorization header first
+	const authHeader = request.headers.get('authorization');
+	if (authHeader?.startsWith('Bearer ')) {
+		return authHeader.substring(7);
+	}
 
-  // Try cookie
-  const token = request.cookies.get('access_token');
-  return token?.value || null;
+	// Try cookie (Next.js 16: cookies() is async)
+	const cookieStore = await cookies();
+	const token = cookieStore.get('access_token');
+	return token?.value || null;
 }
 
 /**
@@ -32,14 +34,14 @@ function extractToken(request: NextRequest): string | null {
  * @param request - Next.js request object
  * @returns User payload if authenticated, null otherwise
  */
-export function verifyAuth(request: NextRequest): TokenPayload | null {
-  const token = extractToken(request);
-  
-  if (!token) {
-    return null;
-  }
+export async function verifyAuth(request: NextRequest): Promise<TokenPayload | null> {
+	const token = await extractToken(request);
 
-  return verifyToken(token);
+	if (!token) {
+		return null;
+	}
+
+	return verifyToken(token);
 }
 
 /**
@@ -47,26 +49,26 @@ export function verifyAuth(request: NextRequest): TokenPayload | null {
  * Returns 401 if not authenticated
  */
 export function requireAuth(
-  handler: (request: NextRequest, user: TokenPayload) => Promise<NextResponse>
+	handler: (request: NextRequest, user: TokenPayload) => Promise<NextResponse>,
 ) {
-  return async (request: NextRequest) => {
-    const user = verifyAuth(request);
+	return async (request: NextRequest) => {
+		const user = await verifyAuth(request);
 
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'Authentication required',
-          },
-        },
-        { status: 401 }
-      );
-    }
+		if (!user) {
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'UNAUTHORIZED',
+						message: 'Authentication required',
+					},
+				},
+				{ status: 401 },
+			);
+		}
 
-    return handler(request, user);
-  };
+		return handler(request, user);
+	};
 }
 
 /**
@@ -74,40 +76,40 @@ export function requireAuth(
  * Returns 403 if user doesn't have required role
  */
 export function requireRole(
-  roles: Array<'user' | 'expert' | 'admin'>,
-  handler: (request: NextRequest, user: TokenPayload) => Promise<NextResponse>
+	roles: Array<'user' | 'expert' | 'admin'>,
+	handler: (request: NextRequest, user: TokenPayload) => Promise<NextResponse>,
 ) {
-  return async (request: NextRequest) => {
-    const user = verifyAuth(request);
+	return async (request: NextRequest) => {
+		const user = await verifyAuth(request);
 
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'UNAUTHORIZED',
-            message: 'Authentication required',
-          },
-        },
-        { status: 401 }
-      );
-    }
+		if (!user) {
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'UNAUTHORIZED',
+						message: 'Authentication required',
+					},
+				},
+				{ status: 401 },
+			);
+		}
 
-    if (!roles.includes(user.role)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'FORBIDDEN',
-            message: 'Insufficient permissions',
-          },
-        },
-        { status: 403 }
-      );
-    }
+		if (!roles.includes(user.role)) {
+			return NextResponse.json(
+				{
+					success: false,
+					error: {
+						code: 'FORBIDDEN',
+						message: 'Insufficient permissions',
+					},
+				},
+				{ status: 403 },
+			);
+		}
 
-    return handler(request, user);
-  };
+		return handler(request, user);
+	};
 }
 
 /**
@@ -115,10 +117,10 @@ export function requireRole(
  * Adds user to request if authenticated, but doesn't require it
  */
 export function optionalAuth(
-  handler: (request: NextRequest, user: TokenPayload | null) => Promise<NextResponse>
+	handler: (request: NextRequest, user: TokenPayload | null) => Promise<NextResponse>,
 ) {
-  return async (request: NextRequest) => {
-    const user = verifyAuth(request);
-    return handler(request, user);
-  };
+	return async (request: NextRequest) => {
+		const user = await verifyAuth(request);
+		return handler(request, user);
+	};
 }

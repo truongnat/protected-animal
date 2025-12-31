@@ -10,7 +10,7 @@ export class GetRelatedSpeciesUseCase {
 				species.id,
 				species.region,
 				species.conservation_status,
-				limit
+				limit,
 			);
 		} catch (error) {
 			console.error(`Error in GetRelatedSpeciesUseCase for species ${species.id}:`, error);

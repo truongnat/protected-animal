@@ -2,6 +2,39 @@ import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Textarea component
+ *
+ * A styled textarea component for multi-line text input.
+ * Supports automatic height adjustment based on content.
+ *
+ * **Accessibility:** Always associate this textarea with a label element using the htmlFor/id pattern
+ * or wrap it in a label element. For textareas without visible labels, use aria-label.
+ *
+ * @example
+ * ```tsx
+ * // With associated label
+ * <div>
+ *   <label htmlFor="description">Description</label>
+ *   <Textarea
+ *     id="description"
+ *     placeholder="Enter description..."
+ *   />
+ * </div>
+ *
+ * // With aria-label (when no visible label)
+ * <Textarea
+ *   aria-label="Additional comments"
+ *   placeholder="Comments..."
+ * />
+ *
+ * // With custom rows
+ * <Textarea rows={5} placeholder="Longer text area" />
+ *
+ * // Disabled state
+ * <Textarea disabled placeholder="Disabled textarea" />
+ * ```
+ */
 function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
 	return (
 		<textarea

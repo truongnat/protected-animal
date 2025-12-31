@@ -4,5 +4,5 @@ import * as schema from './schema';
 
 const DATABASE_PATH = process.env.DATABASE_PATH || './data/protected-animals.db';
 const sqlite = new Database(DATABASE_PATH);
-export const db = drizzle(sqlite, { schema }); 
+export const db = drizzle(sqlite, { schema });
 export { sqlite };

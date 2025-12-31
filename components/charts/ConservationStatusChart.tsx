@@ -1,6 +1,5 @@
 'use client';
 
-import type { Species } from '@/lib/core/domain/entities/species';
 import {
 	ArcElement,
 	type ChartData,
@@ -11,14 +10,49 @@ import {
 } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
+import type { Species } from '@/lib/core/domain/entities/species';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+/**
+ * Props for the ConservationStatusChart component
+ */
 interface ConservationStatusChartProps {
+	/** Array of species to display in the chart */
 	species: Species[];
 }
 
+/**
+ * Gets the color for a conservation status
+ *
+ * @param status - The conservation status string
+ * @returns RGBA color string for the status
+ */
+function getStatusColor(status: string): string {
+	if (status.includes('Critically')) return 'rgba(220, 53, 69, 0.8)'; // Red
+	if (status.includes('Endangered')) return 'rgba(255, 128, 0, 0.8)'; // Orange
+	if (status.includes('Vulnerable')) return 'rgba(255, 193, 7, 0.8)'; // Yellow
+	if (status.includes('Near Threatened')) return 'rgba(40, 167, 69, 0.8)'; // Green
+	return 'rgba(108, 117, 125, 0.8)'; // Gray for others
+}
+
+/**
+ * ConservationStatusChart Component
+ *
+ * Displays a pie chart showing the distribution of species by their IUCN Red List
+ * conservation status. The chart uses color coding to indicate severity levels.
+ *
+ * @param props - Component props
+ * @returns A pie chart visualization of conservation status distribution
+ *
+ * @example
+ * ```tsx
+ * <ConservationStatusChart species={speciesArray} />
+ * ```
+ */
 export default function ConservationStatusChart({ species }: ConservationStatusChartProps) {
+	const { t } = useTranslation();
 	const [chartData, setChartData] = useState<ChartData<'pie'>>({
 		labels: [],
 		datasets: [],
@@ -28,23 +62,14 @@ export default function ConservationStatusChart({ species }: ConservationStatusC
 		// Count species by conservation status
 		const statusCounts: Record<string, number> = {};
 
-		species.forEach((animal) => {
+		for (const animal of species) {
 			const status = animal.conservation_status;
 			statusCounts[status] = (statusCounts[status] || 0) + 1;
-		});
+		}
 
 		// Prepare data for chart
 		const labels = Object.keys(statusCounts);
 		const data = Object.values(statusCounts);
-
-		// Define colors based on conservation status
-		const getStatusColor = (status: string) => {
-			if (status.includes('Critically')) return 'rgba(220, 53, 69, 0.8)'; // Red
-			if (status.includes('Endangered')) return 'rgba(255, 128, 0, 0.8)'; // Orange
-			if (status.includes('Vulnerable')) return 'rgba(255, 193, 7, 0.8)'; // Yellow
-			if (status.includes('Near Threatened')) return 'rgba(40, 167, 69, 0.8)'; // Green
-			return 'rgba(108, 117, 125, 0.8)'; // Gray for others
-		};
 
 		const backgroundColor = labels.map(getStatusColor);
 		const borderColor = labels.map((status) => getStatusColor(status).replace('0.8', '1'));
@@ -53,7 +78,7 @@ export default function ConservationStatusChart({ species }: ConservationStatusC
 			labels,
 			datasets: [
 				{
-					label: 'Number of Species',
+					label: t('charts.conservationStatus.label'),
 					data,
 					backgroundColor,
 					borderColor,
@@ -61,7 +86,7 @@ export default function ConservationStatusChart({ species }: ConservationStatusC
 				},
 			],
 		});
-	}, [species]);
+	}, [species, t]);
 
 	const options: ChartOptions<'pie'> = {
 		responsive: true,
@@ -84,13 +109,15 @@ export default function ConservationStatusChart({ species }: ConservationStatusC
 	};
 
 	return (
-		<div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-			<h3 className="text-xl font-semibold mb-4 text-center">Species by Conservation Status</h3>
+		<div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+			<h3 className="text-xl font-semibold mb-4 text-center text-gray-900 dark:text-gray-100">
+				{t('charts.conservationStatus.title')}
+			</h3>
 			<div className="h-64">
 				<Pie data={chartData} options={options} />
 			</div>
-			<div className="mt-4 text-sm text-gray-600">
-				<p className="text-center">Distribution of species based on their IUCN Red List status</p>
+			<div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+				<p className="text-center">{t('charts.conservationStatus.description')}</p>
 			</div>
 		</div>
 	);

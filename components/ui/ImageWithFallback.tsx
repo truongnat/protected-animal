@@ -1,8 +1,8 @@
 'use client';
 
-import { getImageUrl } from '@/lib/utils';
 import Image, { type ImageProps, type StaticImageData } from 'next/image';
 import { useEffect, useState } from 'react';
+import { getImageUrl } from '@/lib/utils';
 
 interface ImageWithFallbackProps extends Omit<ImageProps, 'onError'> {
 	fallbackSrc?: string;
@@ -35,7 +35,7 @@ export default function ImageWithFallback({
 	// Reset error state if src changes
 	useEffect(() => {
 		setError(false);
-	}, [src]);
+	}, []);
 
 	// Handle image load error
 	const handleError = () => {
@@ -64,7 +64,7 @@ export default function ImageWithFallback({
 		if (!src || (typeof src === 'string' && src.trim() === '')) {
 			handleError();
 		}
-	}, [src]);
+	}, [src, handleError]);
 
 	return <Image {...props} src={error ? imgSrc : src} alt={displayAlt} onError={handleError} />;
 }

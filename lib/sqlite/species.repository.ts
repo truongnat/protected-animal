@@ -1,21 +1,17 @@
 import { and, desc, eq, ilike, or, sql } from 'drizzle-orm';
-import { db } from '../db';
-import { species } from '../schema';
 import type {
 	Species,
 	SpeciesFilters,
 	SpeciesRepository,
 	SpeciesWithPaginationResult,
 } from '../core/domain/entities/species';
+import { db } from '../db';
+import { species } from '../schema';
 
 export class SQLiteSpeciesRepository implements SpeciesRepository {
 	async getFeaturedSpecies(limit = 6): Promise<Species[]> {
 		try {
-			const result = await db
-				.select()
-				.from(species)
-				.orderBy(desc(species.createdAt))
-				.limit(limit);
+			const result = await db.select().from(species).orderBy(desc(species.createdAt)).limit(limit);
 
 			return result.map(this.mapToSpecies);
 		} catch (error) {
@@ -26,10 +22,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 
 	async getAllSpecies(): Promise<Species[]> {
 		try {
-			const result = await db
-				.select()
-				.from(species)
-				.orderBy(species.name);
+			const result = await db.select().from(species).orderBy(species.name);
 
 			return result.map(this.mapToSpecies);
 		} catch (error) {
@@ -40,11 +33,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 
 	async getSpeciesById(id: number): Promise<Species | null> {
 		try {
-			const result = await db
-				.select()
-				.from(species)
-				.where(eq(species.id, id))
-				.limit(1);
+			const result = await db.select().from(species).where(eq(species.id, id)).limit(1);
 
 			return result.length > 0 ? this.mapToSpecies(result[0]) : null;
 		} catch (error) {
@@ -73,7 +62,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 			const result = await db
 				.select()
 				.from(species)
-				.where(eq(species.conservationStatus, status))
+				.where(sql`${species.conservationStatus} = ${status}`)
 				.orderBy(species.name);
 
 			return result.map(this.mapToSpecies);
@@ -93,8 +82,8 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 					or(
 						ilike(species.name, searchTerm),
 						ilike(species.scientificName, searchTerm),
-						ilike(species.description, searchTerm)
-					)
+						ilike(species.description, searchTerm),
+					),
 				)
 				.orderBy(species.name);
 
@@ -112,23 +101,23 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 
 			// Build where conditions
 			const conditions = [];
-			
+
 			if (region) {
 				conditions.push(eq(species.region, region));
 			}
-			
+
 			if (status) {
-				conditions.push(eq(species.conservationStatus, status));
+				conditions.push(sql`${species.conservationStatus} = ${status}`);
 			}
-			
+
 			if (search) {
 				const searchTerm = `%${search}%`;
 				conditions.push(
 					or(
 						ilike(species.name, searchTerm),
 						ilike(species.scientificName, searchTerm),
-						ilike(species.description, searchTerm)
-					)
+						ilike(species.description, searchTerm),
+					),
 				);
 			}
 
@@ -169,7 +158,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 				.where(sql`${species.region} IS NOT NULL AND ${species.region} != ''`)
 				.orderBy(species.region);
 
-			return result.map(row => row.region).filter(Boolean) as string[];
+			return result.map((row) => row.region).filter(Boolean) as string[];
 		} catch (error) {
 			console.error('Error fetching unique regions:', error);
 			return [];
@@ -181,17 +170,24 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 			const result = await db
 				.selectDistinct({ status: species.conservationStatus })
 				.from(species)
-				.where(sql`${species.conservationStatus} IS NOT NULL AND ${species.conservationStatus} != ''`)
+				.where(
+					sql`${species.conservationStatus} IS NOT NULL AND ${species.conservationStatus} != ''`,
+				)
 				.orderBy(species.conservationStatus);
 
-			return result.map(row => row.status).filter(Boolean);
+			return result.map((row) => row.status).filter(Boolean);
 		} catch (error) {
 			console.error('Error fetching unique statuses:', error);
 			return [];
 		}
 	}
 
-	async getRelatedSpecies(speciesId: number, region: string, status: string, limit = 3): Promise<Species[]> {
+	async getRelatedSpecies(
+		speciesId: number,
+		region: string,
+		status: string,
+		limit = 3,
+	): Promise<Species[]> {
 		try {
 			// Get related species by matching region or conservation status
 			// Prioritize same region, then same status, exclude the current species
@@ -201,16 +197,13 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 				.where(
 					and(
 						sql`${species.id} != ${speciesId}`,
-						or(
-							eq(species.region, region),
-							eq(species.conservationStatus, status)
-						)
-					)
+						or(eq(species.region, region), sql`${species.conservationStatus} = ${status}`),
+					),
 				)
 				.orderBy(
 					// Prioritize species with same region
 					sql`CASE WHEN ${species.region} = ${region} THEN 0 ELSE 1 END`,
-					species.name
+					species.name,
 				)
 				.limit(limit);
 
@@ -228,7 +221,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 				.values({
 					name: speciesData.name,
 					scientificName: speciesData.scientific_name,
-					conservationStatus: speciesData.conservation_status,
+					conservationStatus: speciesData.conservation_status as any,
 					population: speciesData.population,
 					habitat: speciesData.habitat,
 					description: speciesData.description,
@@ -247,21 +240,18 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 	async updateSpecies(id: number, speciesData: Partial<Species>): Promise<Species> {
 		try {
 			const updateData: any = {};
-			
+
 			if (speciesData.name) updateData.name = speciesData.name;
 			if (speciesData.scientific_name) updateData.scientificName = speciesData.scientific_name;
-			if (speciesData.conservation_status) updateData.conservationStatus = speciesData.conservation_status;
+			if (speciesData.conservation_status)
+				updateData.conservationStatus = speciesData.conservation_status;
 			if (speciesData.population !== undefined) updateData.population = speciesData.population;
 			if (speciesData.habitat) updateData.habitat = speciesData.habitat;
 			if (speciesData.description) updateData.description = speciesData.description;
 			if (speciesData.image_url) updateData.imageUrl = speciesData.image_url;
 			if (speciesData.region) updateData.region = speciesData.region;
 
-			const result = await db
-				.update(species)
-				.set(updateData)
-				.where(eq(species.id, id))
-				.returning();
+			const result = await db.update(species).set(updateData).where(eq(species.id, id)).returning();
 
 			if (result.length === 0) {
 				throw new Error(`Species with id ${id} not found`);
@@ -276,10 +266,7 @@ export class SQLiteSpeciesRepository implements SpeciesRepository {
 
 	async deleteSpecies(id: number): Promise<void> {
 		try {
-			const result = await db
-				.delete(species)
-				.where(eq(species.id, id))
-				.returning();
+			const result = await db.delete(species).where(eq(species.id, id)).returning();
 
 			if (result.length === 0) {
 				throw new Error(`Species with id ${id} not found`);

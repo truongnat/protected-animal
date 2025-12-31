@@ -3,59 +3,88 @@
  * POST /api/auth/logout
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { cookies, headers } from 'next/headers';
+import { type NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { auditLogs } from '@/lib/schema';
 import { verifyAuth } from '@/lib/middleware/auth';
+import { auditLogs } from '@/lib/schema';
 
-export async function POST(request: NextRequest) {
-  try {
-    // Get user from token (optional - logout works even if token is invalid)
-    const user = verifyAuth(request);
+/**
+ * Success response interface
+ */
+interface SuccessResponse {
+	success: true;
+	data: {
+		message: string;
+	};
+}
 
-    // Log logout action if user is authenticated
-    if (user) {
-      const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-      const userAgent = request.headers.get('user-agent') || 'unknown';
+/**
+ * Error response interface
+ */
+interface ErrorResponse {
+	success: false;
+	error: {
+		code: string;
+		message: string;
+	};
+}
 
-      await db.insert(auditLogs).values({
-        userId: user.userId,
-        action: 'user.logout',
-        entityType: 'user',
-        entityId: user.userId,
-        ipAddress,
-        userAgent,
-      });
-    }
+/**
+ * POST handler for user logout
+ * @param request - Next.js request object
+ * @returns JSON response with success message or error
+ */
+export async function POST(
+	request: NextRequest,
+): Promise<NextResponse<SuccessResponse | ErrorResponse>> {
+	try {
+		// Get user from token (optional - logout works even if token is invalid)
+		const user = await verifyAuth(request);
 
-    // Clear cookies
-    const response = NextResponse.json(
-      {
-        success: true,
-        data: {
-          message: 'Logged out successfully',
-        },
-      },
-      { status: 200 }
-    );
+		// Log logout action if user is authenticated
+		if (user) {
+			const headersList = await headers();
+			const ipAddress =
+				headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+			const userAgent = headersList.get('user-agent') || 'unknown';
 
-    // Delete auth cookies
-    response.cookies.delete('access_token');
-    response.cookies.delete('refresh_token');
-    response.cookies.delete('user_session');
+			await db.insert(auditLogs).values({
+				userId: user.userId,
+				action: 'user.logout',
+				entityType: 'user',
+				entityId: user.userId,
+				ipAddress,
+				userAgent,
+			});
+		}
 
-    return response;
-  } catch (error) {
-    console.error('Logout error:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'An error occurred during logout',
-        },
-      },
-      { status: 500 }
-    );
-  }
+		// Clear cookies
+		const cookieStore = await cookies();
+		cookieStore.delete('access_token');
+		cookieStore.delete('refresh_token');
+		cookieStore.delete('user_session');
+
+		return NextResponse.json(
+			{
+				success: true,
+				data: {
+					message: 'Logged out successfully',
+				},
+			},
+			{ status: 200 },
+		);
+	} catch (error) {
+		console.error('Logout error:', error);
+		return NextResponse.json(
+			{
+				success: false,
+				error: {
+					code: 'INTERNAL_ERROR',
+					message: 'An error occurred during logout',
+				},
+			},
+			{ status: 500 },
+		);
+	}
 }

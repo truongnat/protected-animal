@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Species, SpeciesFilters } from '../core/domain/entities/species';
 
 // API functions
@@ -8,7 +8,7 @@ const speciesApi = {
 	// Get all species with filters
 	getSpecies: async (filters: SpeciesFilters = {}) => {
 		const params = new URLSearchParams();
-		
+
 		if (filters.region) params.append('region', filters.region);
 		if (filters.status) params.append('status', filters.status);
 		if (filters.search) params.append('search', filters.search);

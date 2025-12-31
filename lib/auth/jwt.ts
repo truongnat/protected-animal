@@ -10,15 +10,15 @@ const JWT_EXPIRES_IN = '15m'; // 15 minutes for access token
 const REFRESH_TOKEN_EXPIRES_IN = '7d'; // 7 days for refresh token
 
 export interface TokenPayload {
-  userId: number;
-  email: string;
-  role: 'user' | 'expert' | 'admin';
+	userId: number;
+	email: string;
+	role: 'user' | 'expert' | 'admin';
 }
 
 export interface TokenResponse {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
+	accessToken: string;
+	refreshToken: string;
+	expiresIn: number;
 }
 
 /**
@@ -27,19 +27,19 @@ export interface TokenResponse {
  * @returns Object with access token, refresh token, and expiry
  */
 export function generateTokens(payload: TokenPayload): TokenResponse {
-  const accessToken = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  });
+	const accessToken = jwt.sign(payload, JWT_SECRET, {
+		expiresIn: JWT_EXPIRES_IN,
+	});
 
-  const refreshToken = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: REFRESH_TOKEN_EXPIRES_IN,
-  });
+	const refreshToken = jwt.sign(payload, JWT_SECRET, {
+		expiresIn: REFRESH_TOKEN_EXPIRES_IN,
+	});
 
-  return {
-    accessToken,
-    refreshToken,
-    expiresIn: 15 * 60, // 15 minutes in seconds
-  };
+	return {
+		accessToken,
+		refreshToken,
+		expiresIn: 15 * 60, // 15 minutes in seconds
+	};
 }
 
 /**
@@ -48,12 +48,12 @@ export function generateTokens(payload: TokenPayload): TokenResponse {
  * @returns Decoded token payload or null if invalid
  */
 export function verifyToken(token: string): TokenPayload | null {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
-    return decoded;
-  } catch (error) {
-    return null;
-  }
+	try {
+		const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
+		return decoded;
+	} catch (_error) {
+		return null;
+	}
 }
 
 /**
@@ -62,12 +62,12 @@ export function verifyToken(token: string): TokenPayload | null {
  * @returns Decoded token payload or null if invalid
  */
 export function decodeToken(token: string): TokenPayload | null {
-  try {
-    const decoded = jwt.decode(token) as TokenPayload;
-    return decoded;
-  } catch (error) {
-    return null;
-  }
+	try {
+		const decoded = jwt.decode(token) as TokenPayload;
+		return decoded;
+	} catch (_error) {
+		return null;
+	}
 }
 
 /**
@@ -76,9 +76,9 @@ export function decodeToken(token: string): TokenPayload | null {
  * @returns Verification token
  */
 export function generateVerificationToken(email: string): string {
-  return jwt.sign({ email, type: 'verification' }, JWT_SECRET, {
-    expiresIn: '24h',
-  });
+	return jwt.sign({ email, type: 'verification' }, JWT_SECRET, {
+		expiresIn: '24h',
+	});
 }
 
 /**
@@ -87,15 +87,15 @@ export function generateVerificationToken(email: string): string {
  * @returns Email if valid, null otherwise
  */
 export function verifyVerificationToken(token: string): string | null {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { email: string; type: string };
-    if (decoded.type === 'verification') {
-      return decoded.email;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
+	try {
+		const decoded = jwt.verify(token, JWT_SECRET) as { email: string; type: string };
+		if (decoded.type === 'verification') {
+			return decoded.email;
+		}
+		return null;
+	} catch (_error) {
+		return null;
+	}
 }
 
 /**
@@ -104,9 +104,9 @@ export function verifyVerificationToken(token: string): string | null {
  * @returns Reset token
  */
 export function generateResetToken(email: string): string {
-  return jwt.sign({ email, type: 'reset' }, JWT_SECRET, {
-    expiresIn: '1h',
-  });
+	return jwt.sign({ email, type: 'reset' }, JWT_SECRET, {
+		expiresIn: '1h',
+	});
 }
 
 /**
@@ -115,13 +115,13 @@ export function generateResetToken(email: string): string {
  * @returns Email if valid, null otherwise
  */
 export function verifyResetToken(token: string): string | null {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { email: string; type: string };
-    if (decoded.type === 'reset') {
-      return decoded.email;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
+	try {
+		const decoded = jwt.verify(token, JWT_SECRET) as { email: string; type: string };
+		if (decoded.type === 'reset') {
+			return decoded.email;
+		}
+		return null;
+	} catch (_error) {
+		return null;
+	}
 }

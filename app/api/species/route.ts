@@ -1,5 +1,5 @@
-import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { type NextRequest, NextResponse } from 'next/server';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 
 // GET /api/species - Get all species with filtering, pagination, and search
 export async function GET(request: NextRequest) {
@@ -10,9 +10,11 @@ export async function GET(request: NextRequest) {
 		const region = searchParams.get('region');
 		const status = searchParams.get('status');
 		const search = searchParams.get('search');
-		const page = searchParams.get('page') ? Number.parseInt(searchParams.get('page') as string) : 1;
+		const page = searchParams.get('page')
+			? Number.parseInt(searchParams.get('page') as string, 10)
+			: 1;
 		const limit = searchParams.get('limit')
-			? Number.parseInt(searchParams.get('limit') as string)
+			? Number.parseInt(searchParams.get('limit') as string, 10)
 			: 10;
 
 		// Get use case from factory
@@ -45,10 +47,7 @@ export async function GET(request: NextRequest) {
 		});
 	} catch (error) {
 		console.error('Error in GET /api/species:', error);
-		return NextResponse.json(
-			{ error: 'Failed to fetch species' },
-			{ status: 500 }
-		);
+		return NextResponse.json({ error: 'Failed to fetch species' }, { status: 500 });
 	}
 }
 
@@ -56,21 +55,16 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
-		
+
 		// Get repository from factory
 		const repository = SpeciesFactory.getRepository();
-		
+
 		// Create species
 		const newSpecies = await repository.createSpecies(body);
-		
+
 		return NextResponse.json(newSpecies, { status: 201 });
 	} catch (error) {
 		console.error('Error in POST /api/species:', error);
-		return NextResponse.json(
-			{ error: 'Failed to create species' },
-			{ status: 500 }
-		);
+		return NextResponse.json({ error: 'Failed to create species' }, { status: 500 });
 	}
 }
-
-

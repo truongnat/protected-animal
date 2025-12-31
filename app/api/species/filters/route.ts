@@ -1,5 +1,5 @@
-import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 import { NextResponse } from 'next/server';
+import { SpeciesFactory } from '@/lib/core/factories/species.factory';
 
 // GET /api/species/filters - Get unique regions and conservation statuses
 export async function GET() {
@@ -13,9 +13,6 @@ export async function GET() {
 		return NextResponse.json(filterOptions);
 	} catch (error) {
 		console.error('Error in GET /api/species/filters:', error);
-		return NextResponse.json(
-			{ error: 'Failed to fetch filter options' },
-			{ status: 500 }
-		);
+		return NextResponse.json({ error: 'Failed to fetch filter options' }, { status: 500 });
 	}
 }

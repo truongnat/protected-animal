@@ -1,9 +1,8 @@
+import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import SpeciesCard from '@/components/ui/SpeciesCard';
-import { Species } from '@/lib/core/domain/entities/species';
 import { SpeciesFactory } from '@/lib/core/factories/species.factory';
-import Link from 'next/link';
 
 // Define the types for the search params
 type SearchParams = {
@@ -22,7 +21,7 @@ async function getSpeciesData(searchParams: SearchParams) {
 		const getSpeciesWithFiltersUseCase = SpeciesFactory.createGetSpeciesWithFiltersUseCase();
 
 		// Parse search params
-		const page = Number.parseInt(searchParams.page || '1');
+		const page = Number.parseInt(searchParams.page || '1', 10);
 
 		// Execute use case to get species with filters
 		const result = await getSpeciesWithFiltersUseCase.execute({
@@ -207,14 +206,14 @@ export default async function SpeciesPage({
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 							{species.length > 0 ? (
 								species.map((animal) => (
-									<SpeciesCard 
-										key={animal.id} 
+									<SpeciesCard
+										key={animal.id}
 										species={{
 											...animal,
 											threats: ['Habitat Loss', 'Poaching', 'Climate Change'], // Mock data
 											population: Math.floor(Math.random() * 1000) + 50, // Mock data
 											region: animal.region || 'Vietnam', // Default region
-										}} 
+										}}
 										language="en"
 										showActions={true}
 									/>
@@ -223,7 +222,9 @@ export default async function SpeciesPage({
 								<div className="col-span-3 text-center py-12">
 									<div className="text-6xl mb-4">🔍</div>
 									<p className="text-gray-500 text-lg">No species found matching your criteria.</p>
-									<p className="text-gray-400 text-sm mt-2">Try adjusting your filters or search terms.</p>
+									<p className="text-gray-400 text-sm mt-2">
+										Try adjusting your filters or search terms.
+									</p>
 								</div>
 							)}
 						</div>

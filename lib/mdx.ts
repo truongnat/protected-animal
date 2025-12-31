@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import type { BlogPost } from '@/types/blog';
+import fs from 'node:fs';
+import path from 'node:path';
 import matter from 'gray-matter';
+import type { BlogPost } from '@/types/blog';
 
 const postsDirectory = path.join(process.cwd(), 'content/blog');
 
@@ -28,7 +28,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 			image: data.image || DEFAULT_IMAGES.featured,
 			author: data.author?.name || 'Anonymous',
 		};
-	} catch (error) {
+	} catch (_error) {
 		return null;
 	}
 }

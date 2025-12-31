@@ -1,12 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import { MDXContent } from '@/components/features/blog/mdx-content';
-import { Button } from '@/components/ui/button';
-import { FormattedDate } from '@/components/ui/formatted-date';
+import fs from 'node:fs';
+import path from 'node:path';
 import matter from 'gray-matter';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { MDXContent } from '@/components/features/blog/mdx-content';
+import { Button } from '@/components/ui/button';
+import { FormattedDate } from '@/components/ui/formatted-date';
 
 interface BlogPostPageProps {
 	params: Promise<{

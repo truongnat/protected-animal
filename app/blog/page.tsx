@@ -1,13 +1,12 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { ArrowLeft, Clock } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormattedDate } from '@/components/ui/formatted-date';
-import matter from 'gray-matter';
-import { ArrowLeft } from 'lucide-react';
-import { Clock } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
 	title: 'Blog | Protected Animal',

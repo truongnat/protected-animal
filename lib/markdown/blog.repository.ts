@@ -1,12 +1,9 @@
 import type { BlogPost, BlogRepository } from '../core/domain/entities/blog';
-import { markdownConfig } from './config';
 
 // Cache for blog posts to improve performance
 let postsCache: BlogPost[] | null = null;
 
 export class MarkdownBlogRepository implements BlogRepository {
-	constructor() {}
-
 	// Helper method to fetch from API
 	private async fetchFromApi(path: string): Promise<any> {
 		// Get the origin for absolute URLs
@@ -54,7 +51,7 @@ export class MarkdownBlogRepository implements BlogRepository {
 			// Try to find the post in the cache first
 			if (postsCache) {
 				const cachedPost = postsCache.find((post) => post.slug === slug);
-				if (cachedPost && cachedPost.content) {
+				if (cachedPost?.content) {
 					return cachedPost;
 				}
 			}
@@ -73,7 +70,7 @@ export class MarkdownBlogRepository implements BlogRepository {
 	 * Create a new blog post (not implemented for client-side)
 	 * This would require a POST API endpoint
 	 */
-	async createPost(post: Omit<BlogPost, 'id'>): Promise<BlogPost> {
+	async createPost(_post: Omit<BlogPost, 'id'>): Promise<BlogPost> {
 		throw new Error('Creating posts is not supported in the client. Use the admin interface.');
 	}
 
@@ -81,7 +78,7 @@ export class MarkdownBlogRepository implements BlogRepository {
 	 * Update a blog post (not implemented for client-side)
 	 * This would require a PUT API endpoint
 	 */
-	async updatePost(id: string, post: Partial<BlogPost>): Promise<BlogPost> {
+	async updatePost(_id: string, _post: Partial<BlogPost>): Promise<BlogPost> {
 		throw new Error('Updating posts is not supported in the client. Use the admin interface.');
 	}
 
@@ -89,7 +86,7 @@ export class MarkdownBlogRepository implements BlogRepository {
 	 * Delete a blog post (not implemented for client-side)
 	 * This would require a DELETE API endpoint
 	 */
-	async deletePost(id: string): Promise<void> {
+	async deletePost(_id: string): Promise<void> {
 		throw new Error('Deleting posts is not supported in the client. Use the admin interface.');
 	}
 }

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
 	title: 'Report Wildlife Crime | Vietnam Wildlife Conservation',
-	description: 'Report illegal wildlife activities and help protect Vietnam\'s endangered species.',
+	description: "Report illegal wildlife activities and help protect Vietnam's endangered species.",
 };
 
 export default function ReportPage() {
@@ -13,14 +13,13 @@ export default function ReportPage() {
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 					<div className="mb-6">
 						<span className="text-6xl mb-4 block">🚨</span>
-						<h1 className="text-4xl md:text-5xl font-bold mb-4">
-							Report Wildlife Crime
-						</h1>
+						<h1 className="text-4xl md:text-5xl font-bold mb-4">Report Wildlife Crime</h1>
 						<p className="text-xl max-w-3xl mx-auto">
-							Help protect Vietnam's wildlife by reporting illegal activities. Your report can save lives.
+							Help protect Vietnam's wildlife by reporting illegal activities. Your report can save
+							lives.
 						</p>
 					</div>
-					
+
 					{/* Emergency Contact */}
 					<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto">
 						<h3 className="text-xl font-bold mb-2">Emergency Hotline</h3>
@@ -35,7 +34,7 @@ export default function ReportPage() {
 				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="bg-white rounded-2xl shadow-xl p-8">
 						<h2 className="text-2xl font-bold text-gray-900 mb-6">Submit a Report</h2>
-						
+
 						<form className="space-y-6">
 							{/* Report Type */}
 							<div>
@@ -55,9 +54,7 @@ export default function ReportPage() {
 							{/* Location */}
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-2">
-										Province *
-									</label>
+									<label className="block text-sm font-medium text-gray-700 mb-2">Province *</label>
 									<select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
 										<option value="">Select province</option>
 										<option value="hanoi">Hà Nội</option>
@@ -110,9 +107,7 @@ export default function ReportPage() {
 								</label>
 								<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-red-400 transition-colors">
 									<div className="text-4xl mb-2">📸</div>
-									<p className="text-gray-600">
-										Click to upload or drag and drop files here
-									</p>
+									<p className="text-gray-600">Click to upload or drag and drop files here</p>
 									<p className="text-sm text-gray-500 mt-1">
 										Max file size: 10MB. Supported: JPG, PNG, MP4
 									</p>
@@ -124,9 +119,7 @@ export default function ReportPage() {
 								<h3 className="text-lg font-semibold mb-4">Contact Information (Optional)</h3>
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
-										<label className="block text-sm font-medium text-gray-700 mb-2">
-											Name
-										</label>
+										<label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
 										<input
 											type="text"
 											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
@@ -144,10 +137,11 @@ export default function ReportPage() {
 								</div>
 								<div className="mt-4">
 									<label className="flex items-center">
-										<input type="checkbox" className="rounded border-gray-300 text-red-600 focus:ring-red-500" />
-										<span className="ml-2 text-sm text-gray-600">
-											I want to remain anonymous
-										</span>
+										<input
+											type="checkbox"
+											className="rounded border-gray-300 text-red-600 focus:ring-red-500"
+										/>
+										<span className="ml-2 text-sm text-gray-600">I want to remain anonymous</span>
 									</label>
 								</div>
 							</div>
@@ -159,9 +153,9 @@ export default function ReportPage() {
 									<div>
 										<h4 className="font-semibold text-yellow-800 mb-1">Legal Notice</h4>
 										<p className="text-sm text-yellow-700">
-											All reports are handled according to Vietnam's wildlife protection laws. 
-											False reports may result in legal consequences. Your information will be 
-											shared with relevant authorities for investigation purposes.
+											All reports are handled according to Vietnam's wildlife protection laws. False
+											reports may result in legal consequences. Your information will be shared with
+											relevant authorities for investigation purposes.
 										</p>
 									</div>
 								</div>
@@ -191,7 +185,7 @@ export default function ReportPage() {
 			<section className="py-16 bg-white">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<h2 className="text-3xl font-bold text-center mb-12">Additional Resources</h2>
-					
+
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 						<div className="text-center p-6 bg-gray-50 rounded-xl">
 							<div className="text-4xl mb-4">📋</div>
@@ -203,18 +197,16 @@ export default function ReportPage() {
 								View Guidelines →
 							</button>
 						</div>
-						
+
 						<div className="text-center p-6 bg-gray-50 rounded-xl">
 							<div className="text-4xl mb-4">🏛️</div>
 							<h3 className="text-xl font-semibold mb-2">Legal Framework</h3>
 							<p className="text-gray-600 mb-4">
 								Understand Vietnam's wildlife protection laws and penalties.
 							</p>
-							<button className="text-red-600 font-medium hover:text-red-700">
-								Learn More →
-							</button>
+							<button className="text-red-600 font-medium hover:text-red-700">Learn More →</button>
 						</div>
-						
+
 						<div className="text-center p-6 bg-gray-50 rounded-xl">
 							<div className="text-4xl mb-4">🤝</div>
 							<h3 className="text-xl font-semibold mb-2">Partner Organizations</h3>

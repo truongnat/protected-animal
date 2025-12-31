@@ -1,6 +1,5 @@
-import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import Image from 'next/image';
 import Link from 'next/link';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
 export const metadata = {
 	title: 'About Us | Protected Animals',
